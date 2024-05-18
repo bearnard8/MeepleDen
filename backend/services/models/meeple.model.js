@@ -15,9 +15,13 @@ const meepleSchema = new Schema(
             required: true,
             unique: true
         },
-        dateOfRegistration: {
-            type: Date,
-            default: Date.now
+        password: {
+            type: String,
+            required: true
+        },
+        mail: {
+            type: String,
+            required: true
         },
         avatar: {
             type: String,
@@ -30,6 +34,7 @@ const meepleSchema = new Schema(
     },
     {
         collection: "meeples",
+        timestamps: true
     }
 );
 

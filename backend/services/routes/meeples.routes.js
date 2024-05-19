@@ -50,6 +50,22 @@ meeplesRoute.get("/me", authMidd, async (req, res, next) =>{
 })
 */
 
+meeplesRoute.get(
+    "/googleLogin", 
+    passport.authenticate(
+        "google", 
+        { scope: ["profile", "email"]})
+);
+
+meeplesRoute.get("/callback", passport.authenticate("google", {session: false}) , (req, res, next) => {
+        try {
+            res.redirect(`http://localhost:3000/profile?accessToken=${req.user.accToken}`)
+        } catch(err) {
+            next(err);
+        }
+    }
+)
+
 meeplesRoute.post("/", async (req, res, next) => {
     try {
         let meeple = await Meeple.create({

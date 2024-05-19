@@ -11,6 +11,8 @@ import {
     notFoundHandler,
     unauthorizedHandler,
 } from "./services/middlewares/errorHandler.js";
+import passport from "passport";
+import googleStrategy from "./services/auth/passport.js"
 
 // .env file initialization
 config();
@@ -19,8 +21,9 @@ const MONGO_URL = process.env.MONGO_URL;
 
 const app = express();
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
+passport.use("google", googleStrategy);
 
 app.use(logger);
 

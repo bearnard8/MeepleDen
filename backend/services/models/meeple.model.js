@@ -13,11 +13,11 @@ const meepleSchema = new Schema(
         nickname: {
             type: String,
             required: true,
-            unique: true
+            unique: false
         },
         password: {
             type: String,
-            required: true
+            required: false
         },
         mail: {
             type: String,
@@ -25,12 +25,16 @@ const meepleSchema = new Schema(
         },
         avatar: {
             type: String,
-            required: true
+            required: false
         }, 
         ownedGames: {
             type: Array, // array con gli id dei giochi
-            required: true
+            required: false
         }, 
+        googleId: {
+            type: String,
+            required: false
+        }
     },
     {
         collection: "meeples",

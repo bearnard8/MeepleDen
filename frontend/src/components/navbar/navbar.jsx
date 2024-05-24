@@ -2,7 +2,7 @@ import React from 'react'
 import {Container, Nav, Navbar, Form, Button} from "react-bootstrap";
 import { CiLight } from "react-icons/ci";
 
-export default function navbar() {
+export default function Navbar() {
   return (
     <Navbar 
         expand="lg"
@@ -22,8 +22,8 @@ export default function navbar() {
             </Button>
             <Nav className="me-auto">
                 <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#link">About</Nav.Link>
-                <Nav.Link href="#link">Browser</Nav.Link>
+                <Nav.Link href="#about">About</Nav.Link>
+                <Nav.Link href="#browser">Browser</Nav.Link>
             </Nav>
             <Form
             className="d-flex p-1"

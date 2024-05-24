@@ -1,7 +1,7 @@
 import React from 'react'
 import {Container, Nav, Navbar, ListGroup} from "react-bootstrap";
 
-export default function footer() {
+export default function Footer() {
   return (
     <Navbar 
     expand="lg" 
@@ -18,7 +18,7 @@ export default function footer() {
                         <Nav.Link href="#home">Home</Nav.Link>
                     </ListGroup.Item>
                     <ListGroup.Item className="p-0">
-                        <Nav.Link href="#home">Link</Nav.Link>
+                        <Nav.Link href="#link">Link</Nav.Link>
                     </ListGroup.Item>
                 </ListGroup>
             </Nav>

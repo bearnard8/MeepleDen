@@ -1,7 +1,7 @@
 import { Router } from "express";
 import Den from "../models/den.model.js";
 
-export const densRoute = Router();
+ export const densRoute = Router();
 
 densRoute.get("/", async (req, res) => {
     let dens = await Den.find({});
@@ -67,10 +67,33 @@ densRoute.put("/:id/addMeeple", async (req, res, next) => {
         }
 
         res.status(200).json(den);
-    } catch (err) {
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
+
+densRoute.put("/:id/addGame", async (req, res, next) => {
+    const { denId } = req.params;
+    const { gameId } = req.body;
+
+    try {
+        const den = await Den.findById(denId);
+        const game = await Game.findById(gameId);
+
+        if (!den || !game) {
+            return res.status(404).json({ message: "Den or Game not found" });
+        }
+
+        if (!den.ownedGames.includes(gameId)) {
+            den.ownedGames.push(gameId);;
+            await den.save();
+        }
+
+        res.status(200).json(den);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+})
 
 
 //densRoute.patch("/:id/avatar")

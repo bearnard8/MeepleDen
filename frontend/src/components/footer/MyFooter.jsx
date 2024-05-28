@@ -1,7 +1,7 @@
 import React from 'react'
 import {Container, Nav, Navbar, ListGroup} from "react-bootstrap";
 
-export default function Footer() {
+export default function MyFooter() {
   return (
     <Navbar 
     expand="lg" 

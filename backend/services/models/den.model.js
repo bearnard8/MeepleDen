@@ -10,11 +10,6 @@ const denSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "Meeple"
         },
-        dateOfCreation: {
-            type: Date,
-            required: true,
-            default: Date.now
-        },
         vipStatus: {
             type: Boolean,
             required: true
@@ -26,10 +21,15 @@ const denSchema = new Schema(
         denAvatar: {
             type: String,
             required: true
-        }
+        },
+        ownedGames: [{
+            type: Schema.Types.ObjectID,
+            ref: "Game"
+        }]
     },
     {
         collection: "dens",
+        timestamps: true
     }
 );
 

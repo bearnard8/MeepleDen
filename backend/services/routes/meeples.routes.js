@@ -2,6 +2,7 @@ import { Router } from "express";
 import Meeple from "../models/meeple.model.js";
 import bcrypt from "bcryptjs";
 import { authMidd, generateJWT } from "../auth/index.js";
+import passport from "passport";
 
 export const meeplesRoute = Router();
 

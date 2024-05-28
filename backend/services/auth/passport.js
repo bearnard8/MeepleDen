@@ -22,7 +22,11 @@ const googleStrategy = new GoogleStrategy(options, async(_accessToken, _refreshT
         } else {
             const newMeeple = new Meeple({
                 username: email,
-                googleId: sub
+                googleId: sub,
+                avatar: picture,
+                email: email,
+                name: given_name,
+                surname: family_name
             });
 
             await newMeeple.save();

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Container, Row, Col } from "react-bootstrap";
-// import LatestGames
-// import PlannedGames
-// import Rankings
+import LatestGames from "../components/home/LatestGames";
+import PlannedGames from "../components/home/PlannedGames";
+import Rankings from "../components/home/Rankings";
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
-    const userId = ""; // qui andrà l?ID dell'utente loggato, se esistente
+    const { meeple } = useAuth();
 
     return (
         <Container>
@@ -16,7 +17,7 @@ const Home = () => {
                 </Col>
                 <Col md={6}>
                     <h2>Upcoming Games</h2>
-                    <PlannedGames userID={userID} /> {/* gestire userID */}
+                    <PlannedGames meepleID={meeple._id} /> {/* gestire meepleID */}
                     <h2>Rankings</h2>
                     <Rankings />
                 </Col>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ListGroup, Image } from "react-bootstrap";
 
-const PlannedGames = ({userID}) => {
+const PlannedGames = ({meepleID}) => {
     const [plannedGames, setPlannedGames] = useState([]);
     const [error, setError] = useState(null);
 
@@ -21,7 +21,7 @@ const PlannedGames = ({userID}) => {
         };
 
         fetchPlannedGames();
-    }, {userId});
+    }, [meepleID]);
 
     return (
         <div>
@@ -34,7 +34,7 @@ const PlannedGames = ({userID}) => {
                             <strong> { game.denName } </strong> - {game.date} {game.time}
                         </div>
                     </ListGroup.Item>
-                )) }
+                ))}
             </ListGroup> 
         </div>
     );

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom"; // React-router-dom hook to navigate between pages and access navigated pages history
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] =useState("");
     const { login } = useAuth();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         await login(email, password);
-        history.push("/");
+        navigate.push("/");
     };
 
     return (

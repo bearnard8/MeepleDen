@@ -1,14 +1,18 @@
 import { Router } from "express";
 import Den from "../models/den.model.js";
+import Game from "../models/game.model.js";
+import { authMidd } from "../auth/index.js";
 
- export const densRoute = Router();
+export const densRoute = Router();
 
-densRoute.get("/", async (req, res) => {
+// Get all dens
+densRoute.get("/", authMidd, async (req, res) => {
     let dens = await Den.find({});
     res.send(dens);
 });
 
-densRoute.get("/:id", async (req, res, next) => {
+// Get den with specified :id
+densRoute.get("/:id", authMidd, async (req, res, next) => {
     try {
         let den = await Den.findById(req.params.id);
         res.status(200).send(den);
@@ -17,7 +21,8 @@ densRoute.get("/:id", async (req, res, next) => {
     }
 });
 
-densRoute.post("/", async (req, res, next) => {
+// Create a new den
+densRoute.post("/", authMidd, async (req, res, next) => {
     try {
         let den = await Den.create(req.body);
         res.status(200).send(den);
@@ -26,7 +31,8 @@ densRoute.post("/", async (req, res, next) => {
     }
 });
 
-densRoute.put("/:id", async (req, res, next) => {
+// Modify existing den with specified :id
+densRoute.put("/:id", authMidd, async (req, res, next) => {
     try {
         let den = await Den.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -37,7 +43,8 @@ densRoute.put("/:id", async (req, res, next) => {
     }
 });
 
-densRoute.delete("/:id", async (req, res, next) => {
+// Delete existing den with specified :id
+densRoute.delete("/:id", authMidd, async (req, res, next) => {
     try {
         await Den.deleteOne({
             _id: req.params.id,
@@ -48,8 +55,8 @@ densRoute.delete("/:id", async (req, res, next) => {
     }
 });
 
-// Routes to add a meeple to a den
-densRoute.put("/:id/addMeeple", async (req, res, next) => {
+// Add meeple to a den
+densRoute.put("/:id/addMeeple", authMidd, async (req, res, next) => {
     const { denId } = req.params;
     const { meepleId } = req.body;
 
@@ -72,7 +79,8 @@ densRoute.put("/:id/addMeeple", async (req, res, next) => {
     }
 });
 
-densRoute.put("/:id/addGame", async (req, res, next) => {
+// Add game to ownedGames of a den
+densRoute.put("/:id/addGame", authMidd, async (req, res, next) => {
     const { denId } = req.params;
     const { gameId } = req.body;
 
@@ -95,5 +103,23 @@ densRoute.put("/:id/addGame", async (req, res, next) => {
     }
 })
 
+// Add game to den's wishlist
+densRoute.put("/dens/:id/wishedGames", authMidd, async (req, res, next) => {
+    const { gameId } = req.body;
 
-//densRoute.patch("/:id/avatar")
+    try {
+        const game = await Game.findById(gameId);
+        if(!game) return res.send(404).json({error: "Game not found"});
+
+        const den = await Den.findByIdAndUpdate(
+            req.params.den_id,
+            { $addToSet: { wishedGames: gameId } },
+            { new: true, runValidators: true }
+        );
+        if(!den) return res.status(404).json({error: "Den not found"});
+
+        res.json(den);
+    } catch(error) {
+        res.status(500).json({ error: "Server error" });
+    }
+});

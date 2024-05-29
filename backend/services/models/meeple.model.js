@@ -34,7 +34,11 @@ const meepleSchema = new Schema(
         googleId: {
             type: String,
             required: false
-        }
+        },
+        wishedGames: [{
+            type: Schema.Types.ObjectID,
+            ref: "Game"
+        }]
     },
     {
         collection: "meeples",

@@ -8,7 +8,7 @@ const PlannedGames = ({meepleID}) => {
     useEffect(() => {
         const fetchPlannedGames = async () => {
             try {
-                const response = await fetch ("endpoint");
+                const response = await fetch ("endpoint"); //! definire la rotta
                 if(!response.ok) {
                     throw new Error("Network response was not ok");
                 }

@@ -14,14 +14,14 @@ const googleStrategy = new GoogleStrategy(options, async(_accessToken, _refreshT
         const { email, given_name, family_name, sub, picture } = profile._json;
         const meeple = await Meeple.findOne({email});
         if (meeple) {
-            const accToken = await createAccessToken({
-                _id: meeple._id
+            const accToken = await generateJWT({
+                email: meeple.email
             })
 
             passportNext(null, {accToken});
         } else {
             const newMeeple = new Meeple({
-                username: email,
+                nickname: email,
                 googleId: sub,
                 avatar: picture,
                 email: email,
@@ -31,7 +31,7 @@ const googleStrategy = new GoogleStrategy(options, async(_accessToken, _refreshT
 
             await newMeeple.save();
             const accToken = await generateJWT({
-                username: newMeeple.username
+                email: newMeeple.email
             });
 
             passportNext(null, {accToken});

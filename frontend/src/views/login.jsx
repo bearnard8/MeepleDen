@@ -13,7 +13,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         await login(email, password);
-        navigate.push("/");
+        navigate("/");
     };
 
     return (
@@ -26,7 +26,7 @@ const Login = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    />
+                />
                 <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
                 </Form.Text>

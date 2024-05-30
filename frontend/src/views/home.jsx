@@ -6,7 +6,12 @@ import Rankings from "../components/home/Rankings";
 import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
-    const { meeple } = useAuth();
+    const { meeple } = useAuth(); //! da verificare
+    console.log("Log of meeple: ", meeple);
+    
+    if (!meeple) {
+        return null;
+    }
 
     return (
         <Container>
@@ -16,8 +21,8 @@ const Home = () => {
                     <LatestGames />
                 </Col>
                 <Col md={6}>
-                    <h2>Upcoming Games</h2>
-                    <PlannedGames meepleID={meeple._id} /> {/* gestire meepleID */}
+                    <h2>Planned Games</h2>
+                    <PlannedGames />
                     <h2>Rankings</h2>
                     <Rankings />
                 </Col>

@@ -26,7 +26,7 @@ export const verifyJWT = (token) => {
 
 export const authMidd = async (req, res, next) => {
     try {
-        if (!req.headers["authorization"]) res.status(401).send("Please login.")
+        if (!req.headers["authorization"]) res.status(401).send("Banana.")
         else {
             const decoded = await verifyJWT(
                 req.headers["authorization"].replace("Bearer ", "")

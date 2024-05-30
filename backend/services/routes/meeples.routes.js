@@ -14,30 +14,21 @@ meeplesRoute.get("/", authMidd, async (req, res) => {
     res.send(meeples);
 });
 
-// Get meeple with specified :id
-meeplesRoute.get("/:id", authMidd, async (req, res, next) => {
-    try {
-        let meeple = await Meeple.findById(req.params.id);
-        res.status(200).send(meeple);
-    } catch (err) {
-        next(err);
-    }
-});
-
 // Meeple regular login
 meeplesRoute.post("/login", async ({body}, res, next) => {
     try {
         let foundMeeple = await Meeple.findOne({
             email: body.email,
         })
+        console.log(foundMeeple);
+        console.log(body.email);
         if (foundMeeple) {
             const matching = await bcrypt.compare(body.password, foundMeeple.password)
             if (matching) {
                 const token = await generateJWT({
-                    lastName: foundMeeple.lastName,
                     email: foundMeeple.email
                 })
-                res.send({ user: foundMeeple , token})
+                res.send(JSON.stringify({ meeple: foundMeeple , token}))
             } else res.status(401).send("Wrong password.");
         } else res.status(400).send("Meeple does not exists."); //! non va
     } catch (err) {
@@ -57,9 +48,7 @@ meeplesRoute.get("/me", authMidd, async (req, res, next) =>{
 */
 
 // gAuth Route
-meeplesRoute.get(
-    "/googleLogin", 
-    passport.authenticate(
+meeplesRoute.get("/googleLogin", passport.authenticate(
         "google", 
         { scope: ["profile", "email"]})
 );
@@ -75,7 +64,7 @@ meeplesRoute.get("/callback", passport.authenticate("google", {session: false}) 
 )
 
 // Create new meeple
-meeplesRoute.post("/", validatePassword, async (req, res, next) => {
+meeplesRoute.post("/signup", validatePassword, async (req, res, next) => {
     try {
         let meeple = await Meeple.create({
             ...req.body,
@@ -97,6 +86,16 @@ meeplesRoute.put("/:id", authMidd, async (req, res, next) => {
         res.status(200).send(meeple);
     } catch (err) {
         next(err)
+    }
+});
+
+// Get meeple with specified :id
+meeplesRoute.get("/:id", authMidd, async (req, res, next) => {
+    try {
+        let meeple = await Meeple.findById(req.params.id);
+        res.status(200).send(meeple);
+    } catch (err) {
+        next(err);
     }
 });
 

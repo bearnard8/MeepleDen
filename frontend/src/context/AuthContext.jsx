@@ -5,7 +5,7 @@
  export const useAuth = () => useContext(AuthContext);
 
  export const AuthProvider = ({ children }) => {
-    const [meeple, setMeeple] = useState(null);
+    const [meeple, setMeeple] = useState([]);
     const [token, setToken] = useState(localStorage.getItem("token"));
 
     useEffect(() => {
@@ -42,12 +42,32 @@
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 setToken(data.token);
-                setMeeple(data.meeple); //! da verificare se il backend restituisce i dati dell'utente insieme al token
+                //setMeeple(data.meeple); //! da verificare se il backend restituisce i dati dell'utente insieme al token
             }
         } catch (error) {
             console.error("Error during login: ", error);
         }
     }
+
+    const signup = async ({ name, surname, nickname, email, password }) => {
+        try {
+            const response = await fetch ("endpoint", { //! modificare endpoint
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, surname, nickname, email, password })
+            });
+            const data = await response.json();
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+                setToken(data.token);
+                //setMeeple(data.meeple);  //! da verificare se il backend restituisce i dati dell'utente insieme al token
+            }
+        } catch (error) {
+            console.error("Error during sign-up", error)
+        }
+    };
 
     const logout = () => {
         localStorage.removeItem("token");
@@ -56,7 +76,7 @@
     }
 
     return (
-        <AuthContext.Provider value={{ meeple, login, logout }}>
+        <AuthContext.Provider value={{ meeple, login, signup, logout }}>
             {children}
         </AuthContext.Provider>
     );

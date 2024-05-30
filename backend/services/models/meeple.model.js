@@ -12,14 +12,13 @@ const meepleSchema = new Schema(
         },
         nickname: {
             type: String,
-            required: true,
-            unique: false
+            required: false,
+            unique: true
         },
         password: {
             type: String,
-            required: false
         },
-        mail: {
+        email: {
             type: String,
             required: true
         },

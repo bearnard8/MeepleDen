@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/AuthContext";
 // import '../node_modules/react-bootstrap/bootstrap/dist/css/bootstrap.min.css'; 
 import Home from "./views/home";
 import Login from "./views/login";
+import Signup from "./views/signup";
 import MyNav from "./components/navbar/MyNav";
 import MyFooter from "./components/footer/MyFooter";
 // import Den
@@ -15,8 +16,9 @@ function App() {
       <AuthProvider>
         <MyNav />
         <Routes>
-          <Route path="/" exact component={Home} />
-          <Route path="/login" exact component={Login} />
+          <Route path="/" exact element={<Home />} />
+          <Route path="/login" exact element={<Login />} />
+          <Route path="/signup" exact element={<Signup />} />
           {/*<Route path="/about" exact component={About} />
           <Route path="/den" exact component={Den} />
           <Route path="/profile" exact component={Profile} />*/}

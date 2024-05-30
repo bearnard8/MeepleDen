@@ -3,6 +3,7 @@ import Meeple from "../models/meeple.model.js";
 import Game from "../models/game.model.js";
 import bcrypt from "bcryptjs";
 import { authMidd, generateJWT } from "../auth/index.js";
+import validatePassword from "../middlewares/pwdCheck.js";
 import passport from "passport";
 
 export const meeplesRoute = Router();
@@ -38,7 +39,7 @@ meeplesRoute.post("/login", async ({body}, res, next) => {
                 })
                 res.send({ user: foundMeeple , token})
             } else res.status(401).send("Wrong password.");
-        } else res.status(400).send("Meeple does not exists."); // non va
+        } else res.status(400).send("Meeple does not exists."); //! non va
     } catch (err) {
         next(err);
     }
@@ -74,7 +75,7 @@ meeplesRoute.get("/callback", passport.authenticate("google", {session: false}) 
 )
 
 // Create new meeple
-meeplesRoute.post("/", async (req, res, next) => {
+meeplesRoute.post("/", validatePassword, async (req, res, next) => {
     try {
         let meeple = await Meeple.create({
             ...req.body,

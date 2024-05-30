@@ -23,9 +23,7 @@ export default function MyNav() {
                 <Nav.Link href="#about">About</Nav.Link>
                 <Nav.Link href="#browser">Browser</Nav.Link>
             </Nav>
-            <Form
-            className="d-flex p-1"
-            >
+            <Form className="d-flex p-1" >
                 <Form.Control
                     required
                     type="text"

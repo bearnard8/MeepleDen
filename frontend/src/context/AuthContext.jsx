@@ -8,12 +8,13 @@ export const AuthProvider = ({ children }) => {
     const [meeple, setMeeple] = useState(JSON.parse(localStorage.getItem("meeple") || "{}" ));
     // const [token, setToken] = useState(localStorage.getItem("token"));
     let token = localStorage.getItem("token");
+    const meepleId = meeple._id;
 
     useEffect(() => {
         const fetchMeeple= async () => {
             if (token) {
                 try {
-                    const response = await fetch("endpoint", { //! modificare endpoint
+                    const response = await fetch(`http://localhost:3001/api/meeples/${meeple._id}`, { //! modificare endpoint
                         headers: {
                             "Authorization": `Bearer ${token}`
                         }

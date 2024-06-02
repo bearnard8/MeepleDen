@@ -6,6 +6,7 @@ import { config } from "dotenv";
 import { densRoute } from "./services/routes/dens.routes.js";
 import { meeplesRoute } from "./services/routes/meeples.routes.js";
 import { gamesRoute } from "./services/routes/games.routes.js";
+import { plannedGamesRoute } from "./services/routes/plannedGames.route.js"
 import {
     badRequestHandler,
     genericErrorHandler,
@@ -32,6 +33,7 @@ app.use(logger);
 app.use("/api/dens", densRoute);
 app.use("/api/meeples", meeplesRoute);
 app.use("/api/games", gamesRoute);
+app.use("/api/plannedGames", plannedGamesRoute);
 
 // Error Middlewares
 app.use(badRequestHandler);

@@ -1,23 +1,23 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-const plannedGameSchema = new mongoose.Schema({
+const plannedGameSchema = new Schema({
   den: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Den',
     required: true
   },
   planner: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Meeple',
     required: true
   },
   game: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Game',
     required: true
   },
   date: {
-    type: Date,
+    type: String,
     required: true
   },
   location: {
@@ -34,4 +34,4 @@ const plannedGameSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export default mongoose.model('PlannedGame', plannedGameSchema);
+export default model('PlannedGame', plannedGameSchema);

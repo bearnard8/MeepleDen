@@ -7,7 +7,6 @@ import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
     const { meeple } = useAuth(); //! da verificare
-    console.log("Log of meeple: ", meeple);
     
     if (!meeple) {
         return null;

@@ -1,15 +1,16 @@
 import { Router } from "express";
-import PlannedGame from "../models/plannedGame.model";
-import Meeple from "../models/meeple.model";
+import PlannedGame from "../models/plannedGame.model.js";
+import Meeple from "../models/meeple.model.js";
 
 export const plannedGamesRoute = Router();
 
 // Route to plan a game
-plannedGamesRoute.post("/plannedGames", async (req, res) => {
+plannedGamesRoute.post("/planGame", async (req, res, next) => { //! inserire auth Midd
     const { den, planner, game, date, location, status } = req.body;
 
     try {
         const newPlannedGame = new PlannedGame ({ den, planner, game, date, location, status });
+        console.log(newPlannedGame)
         await newPlannedGame.save();
         res.status(201).json(newPlannedGame);
     } catch (error) {
@@ -18,8 +19,8 @@ plannedGamesRoute.post("/plannedGames", async (req, res) => {
 });
 
 // Route to get all planned games related to a given meeple
-plannedGamesRoute.get("/plannedGames", async (req, res) => {
-    const meepleId = req.meeple._id;
+plannedGamesRoute.post("/plannedGames", async (req, res, next) => {
+    const { meepleId } = req.body;
 
     try {
         const meeple = await Meeple.findById(meepleId).populate("dens");
@@ -32,7 +33,7 @@ plannedGamesRoute.get("/plannedGames", async (req, res) => {
 
         res.json(plannedGames);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        next(error);
     }
 });
 

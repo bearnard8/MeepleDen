@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Den from "../models/den.model.js";
 import Game from "../models/game.model.js";
+import Meeple from "../models/meeple.model.js"
 import { authMidd } from "../auth/index.js";
 
 export const densRoute = Router();
@@ -32,7 +33,7 @@ densRoute.post("/", authMidd, async (req, res, next) => {
 });
 
 // Modify existing den with specified :id
-densRoute.put("/:id", authMidd, async (req, res, next) => {
+densRoute.put("/:id", async (req, res, next) => { //! rimettere authMidd
     try {
         let den = await Den.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -56,8 +57,8 @@ densRoute.delete("/:id", authMidd, async (req, res, next) => {
 });
 
 // Add meeple to a den
-densRoute.put("/:id/addMeeple", authMidd, async (req, res, next) => {
-    const { denId } = req.params;
+densRoute.put("/:id/addMeeple", async (req, res, next) => { //! reinserire authMidd
+    const denId = req.params.id;
     const { meepleId } = req.body;
 
     try{
@@ -71,6 +72,8 @@ densRoute.put("/:id/addMeeple", authMidd, async (req, res, next) => {
         if (!den.members.includes(meepleId)) {
             den.members.push(meepleId);
             await den.save();
+        } else {
+            res.status(404).json({ error: "This meeple is already a member of the den" });
         }
 
         res.status(200).json(den);
@@ -80,8 +83,8 @@ densRoute.put("/:id/addMeeple", authMidd, async (req, res, next) => {
 });
 
 // Add game to ownedGames of a den
-densRoute.put("/:id/addGame", authMidd, async (req, res, next) => {
-    const { denId } = req.params;
+densRoute.put("/:id/addGame", async (req, res, next) => { //! reinserire authMidd
+    const denId = req.params.id;
     const { gameId } = req.body;
 
     try {

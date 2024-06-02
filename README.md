@@ -174,3 +174,10 @@ MeepleDen vuole essere un sito dove i gruppi di amici possono creare un gruppo p
 > timeOfPlay: "string"  
 > extLink: "string"  
 > gallery: []  
+
+#### plannedGames
+
+> id: "string
+> denRef: "string"
+> gameRef: "string"
+> date: "date"

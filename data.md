@@ -70,5 +70,12 @@
     "nickname": "alex_m",
     "password": "AM)12345",
     "email": "alexander.miller@example.com"
+  },
+  {
+    "name": "Grace",
+    "surname": "Martinez",
+    "nickname": "grace_m",
+    "email": "grace.martinez@example.com",
+    "password": "P@ssw0rd7"
   }
 ]

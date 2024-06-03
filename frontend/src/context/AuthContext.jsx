@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("token");
         localStorage.removeItem("meeple");
         //setToken("");
-        setMeeple(null); //! da verificare
+        setMeeple(JSON.parse(localStorage.getItem("meeple") || "{}" )); //! da verificare
     }
 
     return (

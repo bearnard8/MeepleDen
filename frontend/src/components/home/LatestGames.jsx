@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { ListGroup, Image } from 'react-bootstrap';
+import { ListGroup, Spinner, Alert } from 'react-bootstrap';
 
 const LatestGames = () => {
-    const [games, setGames] = useState([]);
+    const [latestGames, setLatestGames] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect (() => {
         const fetchLatestGames = async () => {
             try {
-                const response = await fetch("endpoint"); //! definire la rotta
+                const response = await fetch("http://localhost:3001/api/latestGames/");
                 if (!response.ok) {
-                    throw new Error("Network response was not ok");
+                    throw new Error("Failed to fetch latest games");
                 }
                 const data = await response.json();
-                setGames(data);
+                setLatestGames(data);
             } catch (error) {
                 setError(error.message);
                 console.error("There was an error collecting data", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -24,16 +27,18 @@ const LatestGames = () => {
     }, []);
 
     return(
-        <div>
-            {error && <p>Error: {error}</p>}
-            <ListGroup>
-                {games.map(game => (
-                    <ListGroup.Item key={game.id} action href={`/games/${game.id}`}>
-                        <Image src={game.cover} thumbnail className="me-2" /> {game.name}
-                    </ListGroup.Item>
-                ))}
-            </ListGroup>
-        </div>
+        <ListGroup>
+            {latestGames.map(game => (
+                <ListGroup.Item key={game._id}>
+                    <div>
+                        <strong>Game:</strong> {game.name}
+                    </div>
+                    <div>
+                        <strong>Release Date:</strong> {new Date(game.releaseDate).toLocaleDateString()}
+                    </div>
+                </ListGroup.Item>
+            ))}
+        </ListGroup>
     );
 };
 

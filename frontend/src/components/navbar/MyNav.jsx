@@ -21,7 +21,6 @@ export default function MyNav() {
     const handleGoogleLogin = async (e) => {
         const str = `http://localhost:3001/api/meeples/googleLogin`;
         window.open(str, "_self");
-        console.log("Str", str)
     }
 
     return (
@@ -31,7 +30,7 @@ export default function MyNav() {
             //variant={theme}
             >
             <Container>
-            <Navbar.Brand href="#home"> MeepleDen </Navbar.Brand>
+            <Navbar.Brand href="/"> MeepleDen </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Button 
@@ -41,9 +40,10 @@ export default function MyNav() {
                 >
                 </Button>
                 <Nav className="me-auto">
-                    <Nav.Link href="#home">Home</Nav.Link>
+                    <Nav.Link href="/">Home</Nav.Link>
                     <Nav.Link href="#about">About</Nav.Link>
-                    <Nav.Link href="#browser">Browser</Nav.Link>
+                    <Nav.Link href="#browser">Dens</Nav.Link>
+                    <Nav.Link href="#browser">Profile</Nav.Link>
                 </Nav>
                 <Form className="d-flex p-1" >
                     <Form.Control

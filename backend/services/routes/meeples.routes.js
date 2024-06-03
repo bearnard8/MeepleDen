@@ -9,7 +9,7 @@ import passport from "passport";
 export const meeplesRoute = Router();
 
 // Get all meeples
-meeplesRoute.get("/", authMidd, async (req, res) => {
+meeplesRoute.get("/", async (req, res) => { //! reinserire authMidd
     let meeples = await Meeple.find({});
     res.send(meeples);
 });
@@ -20,8 +20,6 @@ meeplesRoute.post("/login", async ({body}, res, next) => {
         let foundMeeple = await Meeple.findOne({
             email: body.email,
         })
-        console.log(foundMeeple);
-        console.log(body.email);
         if (foundMeeple) {
             const matching = await bcrypt.compare(body.password, foundMeeple.password)
             if (matching) {

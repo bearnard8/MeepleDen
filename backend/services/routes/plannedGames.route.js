@@ -4,13 +4,18 @@ import Meeple from "../models/meeple.model.js";
 
 export const plannedGamesRoute = Router();
 
+// Get all planned games
+plannedGamesRoute.get("/", async (req, res) => { //!reinserire authMidd
+    let plannedGames = await PlannedGame.find({});
+    res.send(plannedGames);
+});
+
 // Route to plan a game
 plannedGamesRoute.post("/planGame", async (req, res, next) => { //! inserire auth Midd
     const { den, planner, game, date, location, status } = req.body;
 
     try {
         const newPlannedGame = new PlannedGame ({ den, planner, game, date, location, status });
-        console.log(newPlannedGame)
         await newPlannedGame.save();
         res.status(201).json(newPlannedGame);
     } catch (error) {
@@ -19,7 +24,7 @@ plannedGamesRoute.post("/planGame", async (req, res, next) => { //! inserire aut
 });
 
 // Route to get all planned games related to a given meeple
-plannedGamesRoute.post("/plannedGames", async (req, res, next) => {
+plannedGamesRoute.post("/", async (req, res, next) => {
     const { meepleId } = req.body;
 
     try {
@@ -30,6 +35,7 @@ plannedGamesRoute.post("/plannedGames", async (req, res, next) => {
         }
 
         const plannedGames = await PlannedGame.find({ den: { $in: meeple.dens } }).populate("den planner game");
+        if (plannedGames.length === 0) res.status(200).json({message: "There are no games planned..."})
 
         res.json(plannedGames);
     } catch (error) {
@@ -43,7 +49,7 @@ plannedGamesRoute.put("/plannedGame/:id", async (req, res, next) => {
 
     try {
         const plannedGame = await PlannedGame.findByIdAndUpdate(req.params.id, { status }, { new: true });
-        if(!plannedGames) {
+        if(!plannedGame) {
             return res.status(404).json({ error: "Planned game not found" });
         }
         res.json(plannedGame);

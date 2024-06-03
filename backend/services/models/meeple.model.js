@@ -37,6 +37,10 @@ const meepleSchema = new Schema(
         wishedGames: [{
             type: Schema.Types.ObjectID,
             ref: "Game"
+        }],
+        dens: [{ 
+            type: Schema.Types.ObjectId, 
+            ref: 'Den' 
         }]
     },
     {

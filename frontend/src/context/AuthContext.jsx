@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }) => {
                 body: JSON.stringify({ email, password })
             });
             const data = await response.json();
-            console.log(data);
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("meeple", JSON.stringify(data.meeple));
@@ -51,7 +50,6 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error("Error during login: ", error);
         }
-        console.log("ti sei loggato");
     }
 
     const signup = async ({ name, surname, nickname, email, password }) => {
@@ -79,7 +77,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("meeple");
         //setToken("");
         setMeeple(null); //! da verificare
-        console.log("ti sei sloggato");
     }
 
     return (

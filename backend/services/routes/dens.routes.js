@@ -76,6 +76,11 @@ densRoute.put("/:id/addMeeple", async (req, res, next) => { //! reinserire authM
             res.status(404).json({ error: "This meeple is already a member of the den" });
         }
 
+        if(!meeple.dens.includes(denId)) {
+            meeple.dens.push(denId);
+            await meeple.save();
+        }
+
         res.status(200).json(den);
     } catch (error) {
         res.status(500).json({ message: error.message });

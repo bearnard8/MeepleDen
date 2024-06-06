@@ -66,6 +66,9 @@ const PlannedGames = () => {
                         <strong>Game:</strong> {game.game.name}
                     </div>
                     <div>
+                        <strong>Den:</strong> {game.den.name}
+                    </div>
+                    <div>
                         <strong>Date:</strong> {new Date(game.date).toLocaleString()}
                     </div>
                     <div>

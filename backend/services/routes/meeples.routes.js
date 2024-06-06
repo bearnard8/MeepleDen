@@ -54,7 +54,8 @@ meeplesRoute.get("/googleLogin", passport.authenticate(
 // gAuth callback
 meeplesRoute.get("/callback", passport.authenticate("google", {session: false}) , (req, res, next) => {
         try {
-            res.redirect(`http://localhost:3000/profile?accessToken=${req.user.accToken}`)
+            //res.redirect(`http://localhost:3000/profile?accessToken=${req.user.accToken}`)
+            res.redirect(`http://localhost:3000/?accessToken=${req.user.accessToken}`)
         } catch(err) {
             next(err);
         }
@@ -90,10 +91,26 @@ meeplesRoute.put("/:id", authMidd, async (req, res, next) => {
 // Get meeple with specified :id
 meeplesRoute.get("/:id", authMidd, async (req, res, next) => {
     try {
-        let meeple = await Meeple.findById(req.params.id);
+        //let meeple = await Meeple.findById(req.params.id);
+        const meeple = await Meeple.findById(req.params.id)
+            .populate('dens', 'name');
         res.status(200).send(meeple);
     } catch (err) {
         next(err);
+    }
+});
+
+// Get meeple with specified :email
+meeplesRoute.get('/:email', authMidd, async (req, res, next) => {
+    try {
+        const meeple = await Meeple.findOne({ email: req.params.email })
+            .populate('dens', 'name');
+        if (!meeple) {
+            return res.status(404).json({ error: 'Meeple not found' });
+        }
+        res.json(meeple);
+    } catch (error) {
+        next(error);
     }
 });
 

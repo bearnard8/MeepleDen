@@ -13,9 +13,18 @@ densRoute.get("/", authMidd, async (req, res) => {
 });
 
 // Get den with specified :id
-densRoute.get("/:id", authMidd, async (req, res, next) => {
+densRoute.get("/:id", async (req, res, next) => { //!  authMidd,
     try {
-        let den = await Den.findById(req.params.id);
+        let den = await Den.findById(req.params.id)
+            .populate("members", "nickname")
+            .populate("ownedGames", "name")
+            .populate({
+                path: "plannedGames",
+                populate: { path: "game", select: "name" }
+            })
+        if (!den) {
+            res.status(404).json({ error: "Den not found" });
+        }
         res.status(200).send(den);
     } catch (err) {
         next(err);

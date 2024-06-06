@@ -1,4 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 
@@ -6,20 +8,19 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [meeple, setMeeple] = useState(JSON.parse(localStorage.getItem("meeple") || "{}" ));
-    // const [token, setToken] = useState(localStorage.getItem("token"));
     let token = localStorage.getItem("token");
     const meepleId = meeple._id;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMeeple= async () => {
             if (token) {
                 try {
-                    const response = await fetch(`http://localhost:3001/api/meeples/${meeple._id}`, { //! modificare endpoint
+                    const response = await fetch(`http://localhost:3001/api/meeples/${meepleId}`, {
                         headers: {
                             "Authorization": `Bearer ${token}`
                         }
                     });
-                    
                     const data = await response.json();
                     setMeeple(data);
                 } catch (error) {
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         fetchMeeple();
-    }, [token]);
+    }, [meepleId, token]);
 
     const login = async (email, password) => {
         try {
@@ -44,13 +45,13 @@ export const AuthProvider = ({ children }) => {
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("meeple", JSON.stringify(data.meeple));
-                //setToken(data.token);
-                setMeeple(data.meeple); //! da verificare se il backend restituisce i dati dell'utente insieme al token
+                setMeeple(data.meeple);
             }
         } catch (error) {
             console.error("Error during login: ", error);
         }
     }
+
 
     const signup = async ({ name, surname, nickname, email, password }) => {
         try {
@@ -64,23 +65,48 @@ export const AuthProvider = ({ children }) => {
             const data = await response.json();
             if (data.token) {
                 localStorage.setItem("token", data.token);
-                //setToken(data.token);
-                setMeeple(data.meeple);  //! da verificare se il backend restituisce i dati dell'utente insieme al token
+                localStorage.setItem("meeple", JSON.stringify(data.meeple));
+                setMeeple(data.meeple);
             }
         } catch (error) {
             console.error("Error during sign-up", error)
         }
     };
 
+    const googleLogin = async () => {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("accessToken");
+        if (token) {
+            localStorage.setItem("token", token);
+            const decodedToken = jwtDecode(token);
+
+            try {
+                const response = await fetch(`http://localhost:3001/api/meeples/email/${decodedToken.email}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                localStorage.setItem("meeple", JSON.stringify(data));
+                setMeeple(data);
+            } catch (error) {
+                console.error("Error fetching meeple data", error);
+            }
+        }
+    }
+
     const logout = () => {
+        if (meeple && meeple.googleId) {
+            window.location.href = "'https://accounts.google.com/logout';"
+        }
         localStorage.removeItem("token");
         localStorage.removeItem("meeple");
-        //setToken("");
-        setMeeple(JSON.parse(localStorage.getItem("meeple") || "{}" )); //! da verificare
+        setMeeple(JSON.parse(localStorage.getItem("meeple") || "{}" ));
+        navigate("/login");
     }
 
     return (
-        <AuthContext.Provider value={{ meeple, login, signup, logout }}>
+        <AuthContext.Provider value={{ meeple, login, googleLogin, signup, logout }}>
             {children}
         </AuthContext.Provider>
     );

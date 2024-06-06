@@ -29,6 +29,10 @@ const denSchema = new Schema(
         wishedGames: [{
             type: Schema.Types.ObjectID,
             ref: "Game"
+        }],
+        plannedGames: [{
+            type: Schema.Types.ObjectID,
+            ref: "PlannedGame"
         }]
     },
     {

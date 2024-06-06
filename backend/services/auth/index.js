@@ -24,9 +24,23 @@ export const verifyJWT = (token) => {
     )
 }
 
+/*export const decodeJWT = (token) => {
+    const decoded = verifyJWT(
+        req.headers["authorization"].replace("Bearer ", "") 
+    );
+    if (decoded.exp) {
+        delete decoded.iat;
+        delete decoded.exp;
+        const me = Meeple.findOne({
+            ...decoded,
+        });
+        res.send(JSON.stringify({ meeple: foundMeeple , token}))
+    } else res.status(401).send({ error: "Meeple not found."});
+}*/
+
 export const authMidd = async (req, res, next) => {
     try {
-        if (!req.headers["authorization"]) res.status(401).send("Banana.")
+        if (!req.headers["authorization"]) res.status(401).send({error: "Please login."})
         else {
             const decoded = await verifyJWT(
                 req.headers["authorization"].replace("Bearer ", "")
@@ -40,8 +54,8 @@ export const authMidd = async (req, res, next) => {
                 if (me) {
                     req.user = me;
                     next();
-                } else res.status(401).send("Meeple not found.");
-            } else res.status(401).send("Please login again");
+                } else res.status(401).send({ error: "Meeple not found."});
+            } else res.status(401).send({ error: "Please login again"});
         }
     } catch (err) {
         next(error);

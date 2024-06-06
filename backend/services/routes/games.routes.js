@@ -1,11 +1,25 @@
 import { Router } from "express";
 import Game from "../models/game.model.js";
+import { authMidd } from "../auth/index.js";
 
 export const gamesRoute = Router();
 
 gamesRoute.get("/", async (req, res) => {
     let games = await Game.find({});
     res.send(games);
+});
+
+gamesRoute.get("/search", async (req, res, next) => {
+    try {
+        const query = req.query.query;
+        if (typeof query !== "string" || query.trim() === "") {
+            return res.status(400).json({ error: "Invalid search query" });    
+        }
+        const games = await Game.find({ name: { $regex: query, $options: 'i' } });
+        res.json(games);
+    } catch (error) {
+        next(error);
+    }
 });
 
 gamesRoute.get("/:id", async (req, res, next) => {

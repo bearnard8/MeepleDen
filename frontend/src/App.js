@@ -5,6 +5,7 @@ import { AuthProvider } from "./context/AuthContext";
 import Home from "./views/Home";
 import Den from "./views/Den";
 import Profile from "./views/Profile";
+import GameSearchResults from "./views/GameSearchResults.jsx";
 import Login from "./views/Login";
 import Signup from "./views/Signup";
 import MyNav from "./components/navbar/MyNav";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/signup" exact element={<Signup />} />
           <Route path="/den/:denId" exact element={<Den />} />
           <Route path="/meeple/:meepleId" exact element={<Profile />} />
+          <Route path="/search" exact element={<GameSearchResults />} />
           {/*<Route path="/about" exact element={About} />*/}
         </Routes>
       </AuthProvider>

@@ -56,4 +56,3 @@ const gameSchema = new Schema(
 )
 
 export default model("Game", gameSchema)
-

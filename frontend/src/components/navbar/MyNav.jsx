@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Container, Nav, Navbar, NavDropdown, Form, Button} from "react-bootstrap";
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function MyNav() {
 
     const { meeple, logout, googleLogin } = useAuth();
+    const [ searchQuery, setSearchQuery ] = useState("");
     const navigate = useNavigate();
 
     const handleLogout = async (e) => {
@@ -27,6 +28,15 @@ export default function MyNav() {
         googleLogin();
     })
 
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        navigate(`/search?query=${searchQuery}`);
+    }
+
     return (
         <Navbar expand="lg">
             <Container>
@@ -45,13 +55,16 @@ export default function MyNav() {
                         </NavDropdown>
                         <Nav.Link href={`/meeple/${meeple._id}`}>Profile</Nav.Link>
                     </Nav>
-                    <Form className="d-flex p-1" >
+                    <Form className="d-flex p-1" onSubmit={handleSearchSubmit} >
                         <Form.Control
                             required
-                            type="text"
-                            placeholder="Search a den..."
                             className=" mr-sm-2"
+                            type="text"
+                            placeholder="Search a game..."
+                            value={searchQuery}
+                            onChange={handleSearchChange}
                         />
+                        <Button type='submit'> Search </Button>
                     </Form>
                     <Button onClick={handleLogout}>
                         Logout

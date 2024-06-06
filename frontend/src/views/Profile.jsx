@@ -4,9 +4,11 @@ import { useAuth } from "../context/AuthContext.jsx";
 import MeeplePersonalInfo from '../components/meeple/MeeplePersonalInfo';
 import PlannedGames from '../components/home/PlannedGames';
 import MeepleOwnedGames from '../components/meeple/MeepleOwnedGames';
+import MeepleWishedGames from '../components/meeple/MeepleWishedGames.jsx';
 
 const Profile = () => {
     const { meeple, updateMeeple } = useAuth();
+    const { token } = useAuth();
     const [ profileData, setProfileData ] = useState(null);
 
     useEffect(() => {
@@ -27,7 +29,30 @@ const Profile = () => {
         if (meeple._id) {
             fetchProfileData();
         }
-    }, [meeple._id]);
+
+    }, [meeple._id, token]);
+
+    const handleRemoveGame = async (gameId, listType) => {
+        try {
+            const url = listType === "owned"
+                ? `http://localhost:3001/api/meeples/${meeple._id}/removeOwnedGame`
+                : `http://localhost:3001/api/meeples/${meeple._id}/removeWishedGame`;
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ gameId })
+                });
+
+                const data = await response.json();
+                setProfileData(data);
+        } catch (error) {
+            console.error("Error while removing game from list: ", error);
+        }
+    }
 
     if (!profileData) {
         return <div>Loading...</div>;
@@ -44,7 +69,10 @@ const Profile = () => {
                     <PlannedGames plannedGames={profileData.plannedGames} />
                 </Col>
                 <Col md={4}>
-                    <MeepleOwnedGames ownedGames={profileData.ownedGames} />
+                    <MeepleOwnedGames ownedGames={profileData.ownedGames} handleRemoveGame={handleRemoveGame} />
+                </Col>
+                <Col md={4}>
+                    <MeepleWishedGames wishedGames={meeple.wishedGames} handleRemoveGame={handleRemoveGame} />
                 </Col>
             </Row>
         </Container>

@@ -91,9 +91,16 @@ meeplesRoute.put("/:id", authMidd, async (req, res, next) => {
 // Get meeple with specified :id
 meeplesRoute.get("/:id", authMidd, async (req, res, next) => {
     try {
-        //let meeple = await Meeple.findById(req.params.id);
         const meeple = await Meeple.findById(req.params.id)
-            .populate('dens', 'name');
+            .populate('dens', 'name')
+            .populate({
+                path: "plannedGames",
+                populate: { path: "game", select: "name" }
+            })
+            .populate("ownedGames", "name");
+        if (!meeple) {
+            res.status(404).json({ error: "Meeple not found" });
+        }
         res.status(200).send(meeple);
     } catch (err) {
         next(err);
@@ -125,6 +132,30 @@ meeplesRoute.delete("/:id", authMidd, async (req, res, next) => {
         next(err);
     }
 });
+
+// Add game to ownedGames of a meeple
+meeplesRoute.put("/:id/addGame", async (req, res, next) => { //! reinserire authMidd
+    const meepleId = req.params.id;
+    const { gameId } = req.body;
+
+    try {
+        const meeple = await Meeple.findById(meepleId);
+        const game = await Game.findById(gameId);
+
+        if (!meeple || !game) {
+            return res.status(404).json({ message: "Meeple or Game not found" });
+        }
+
+        if (!meeple.ownedGames.includes(gameId)) {
+            meeple.ownedGames.push(gameId);;
+            await meeple.save();
+        }
+
+        res.status(200).json(meeple);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+})
 
 // Add game to meeple's wishlist
 meeplesRoute.put("/meeples/:id/wishedGames", authMidd, async (req, res, next) => {

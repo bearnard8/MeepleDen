@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
     const meepleId = meeple._id;
     const navigate = useNavigate();
 
+    // Meeple update
+
     useEffect(() => {
         const fetchMeeple= async () => {
             if (token) {
@@ -32,6 +34,8 @@ export const AuthProvider = ({ children }) => {
         fetchMeeple();
     }, [meepleId, token]);
 
+    // Global authentication functions
+
     const login = async (email, password) => {
         try {
             const response = await fetch("http://localhost:3001/api/meeples/login", {
@@ -51,7 +55,6 @@ export const AuthProvider = ({ children }) => {
             console.error("Error during login: ", error);
         }
     }
-
 
     const signup = async ({ name, surname, nickname, email, password }) => {
         try {
@@ -95,6 +98,24 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const updateMeeple = async (updatedMeeple) => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/meeples/${updatedMeeple._id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedMeeple)
+            });
+            const data = await response.json();
+            localStorage.setItem("meeple", JSON.stringify(data));
+            setMeeple(data);
+        } catch (error) {
+            console.error("There was an error while updating meeple", error)
+        }
+    }
+
     const logout = () => {
         if (meeple && meeple.googleId) {
             window.location.href = "'https://accounts.google.com/logout';"
@@ -106,7 +127,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ meeple, login, googleLogin, signup, logout }}>
+        <AuthContext.Provider value={{ meeple, login, googleLogin, signup, updateMeeple, logout }}>
             {children}
         </AuthContext.Provider>
     );

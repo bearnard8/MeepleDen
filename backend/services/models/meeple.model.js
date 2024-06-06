@@ -20,16 +20,17 @@ const meepleSchema = new Schema(
         },
         email: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
         avatar: {
             type: String,
             required: false
         }, 
-        ownedGames: {
-            type: Array, // array con gli id dei giochi
-            required: false
-        }, 
+        ownedGames: [{ 
+            type: Schema.Types.ObjectId, 
+            ref: 'Game' 
+        }], 
         googleId: {
             type: String,
             required: false
@@ -41,6 +42,10 @@ const meepleSchema = new Schema(
         dens: [{ 
             type: Schema.Types.ObjectId, 
             ref: 'Den' 
+        }],
+        plannedGames: [{ 
+            type: Schema.Types.ObjectId, 
+            ref: 'PlannedGame' 
         }]
     },
     {

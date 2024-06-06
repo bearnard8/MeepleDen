@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 
-const DenOwnedGames = ({ ownedGames }) => {
+const MeepleOwnedGames = ({ ownedGames }) => {
     return (
         <div>
             <h3>Owned Games</h3>
@@ -14,4 +14,4 @@ const DenOwnedGames = ({ ownedGames }) => {
     );
 };
 
-export default DenOwnedGames;
+export default MeepleOwnedGames;

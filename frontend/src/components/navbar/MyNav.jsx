@@ -34,16 +34,16 @@ export default function MyNav() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link key="home" href="/">Home</Nav.Link>
-                        <Nav.Link key="about" href="#about">About</Nav.Link>
-                        <NavDropdown key="dens" title="Dens" id="basic-nav-dropdown">
+                        <Nav.Link href="/">Home</Nav.Link>
+                        <Nav.Link href="#about">About</Nav.Link>
+                        <NavDropdown title="Dens" id="basic-nav-dropdown">
                             {meeple && meeple.dens && meeple.dens.map(den => (
                                 <NavDropdown.Item key={den._id} href={`/den/${den._id}`}>
                                     {den.name}
                                 </NavDropdown.Item>
                             ))}
                         </NavDropdown>
-                        <Nav.Link key="browser" href="#browser">Profile</Nav.Link>
+                        <Nav.Link href={`/meeple/${meeple._id}`}>Profile</Nav.Link>
                     </Nav>
                     <Form className="d-flex p-1" >
                         <Form.Control

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Container, Nav, Navbar, NavDropdown, Form, Button} from "react-bootstrap";
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logo2.jpg";
 
 export default function MyNav() {
 
@@ -14,15 +15,6 @@ export default function MyNav() {
         await logout();
         navigate("/")
     };
-
-    const handleLogin = (e) => {
-        navigate("/login")
-    }
-
-    const handleGoogleLogin = async (e) => {
-        const str = `http://localhost:3001/api/meeples/googleLogin`;
-        window.open(str, "_self");
-    }
 
     useEffect(() => {
         googleLogin();
@@ -38,14 +30,23 @@ export default function MyNav() {
     }
 
     return (
-        <Navbar expand="lg">
+        <Navbar expand="lg" className='d-flex align-items-center'>
             <Container>
-                <Navbar.Brand href="/"> MeepleDen </Navbar.Brand>
+                <Navbar.Brand href={meeple._id ? "/home" : "/"} className='d-flex align-items-center'> 
+                    <img
+                        src={logo}
+                        width="40"
+                        height="33"
+                        className="d-inline-block align-top"
+                        alt="MeepleDen logo"
+                    />
+                    MeepleDen
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link href="/">Home</Nav.Link>
-                        <Nav.Link href="#about">About</Nav.Link>
+                        <Nav.Link href="/about">About</Nav.Link>
                         <NavDropdown title="Dens" id="basic-nav-dropdown">
                             {meeple && meeple.dens && meeple.dens.map(den => (
                                 <NavDropdown.Item key={den._id} href={`/den/${den._id}`}>
@@ -64,16 +65,10 @@ export default function MyNav() {
                             value={searchQuery}
                             onChange={handleSearchChange}
                         />
-                        <Button type='submit'> Search </Button>
+                        <Button type='submit' size="sm" variant='outline-info'> Search </Button>
                     </Form>
-                    <Button onClick={handleLogout}>
+                    <Button onClick={handleLogout} variant='outline-danger'>
                         Logout
-                    </Button>
-                    <Button onClick={handleLogin}>
-                        Login
-                    </Button>
-                    <Button onClick={handleGoogleLogin}>
-                        Login con Google
                     </Button>
                 </Navbar.Collapse>
             </Container>

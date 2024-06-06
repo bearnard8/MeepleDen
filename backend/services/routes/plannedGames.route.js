@@ -5,13 +5,13 @@ import Meeple from "../models/meeple.model.js";
 export const plannedGamesRoute = Router();
 
 // Get all planned games
-plannedGamesRoute.get("/", async (req, res) => { //!reinserire authMidd
+plannedGamesRoute.get("/", async (req, res) => {
     let plannedGames = await PlannedGame.find({});
     res.send(plannedGames);
 });
 
 // Route to plan a game
-plannedGamesRoute.post("/planGame", async (req, res, next) => { //! inserire auth Midd
+plannedGamesRoute.post("/planGame", async (req, res, next) => {
     const { den, planner, game, date, location, status } = req.body;
 
     try {

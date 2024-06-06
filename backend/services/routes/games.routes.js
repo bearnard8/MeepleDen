@@ -1,6 +1,5 @@
 import { Router } from "express";
 import Game from "../models/game.model.js";
-import { authMidd } from "../auth/index.js";
 
 export const gamesRoute = Router();
 

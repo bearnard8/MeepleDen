@@ -10,7 +10,7 @@ export default function MyFooter() {
     //bg={theme}
     >
         <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#home">MeepleDen</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Nav className="me-auto">
                 <ListGroup horizontal>

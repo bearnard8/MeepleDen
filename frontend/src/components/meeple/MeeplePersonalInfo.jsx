@@ -62,7 +62,7 @@ const MeeplePersonalInfo = () => {
                             onChange={handleInputChange}
                         />
                     </Form.Group>
-                    <Button variant="primary" onClick={handleUpdateMeeple}>
+                    <Button variant="outline-primary" size="sm" onClick={handleUpdateMeeple}>
                         Conferma
                     </Button>
                 </Form>
@@ -74,7 +74,7 @@ const MeeplePersonalInfo = () => {
                     <ListGroup.Item><strong>Email:</strong> {meeple.email}</ListGroup.Item>
                 </ListGroup>
             )}
-            <Button variant="secondary" onClick={handleEditToggle} className="mt-3">
+            <Button variant="outline-secondary" size="sm" onClick={handleEditToggle} className="mt-3">
                 {isEditing ? 'Annulla' : 'Modifica'}
             </Button>
         </div>

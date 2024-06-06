@@ -15,7 +15,6 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await signup({ name, surname, nickname, email, password });
-    navigate('/'); //! Redirige alla home dopo la registrazione, o al profilo?
   };
 
   return (
@@ -69,7 +68,7 @@ const Signup = () => {
                             required
                         />
                     </Form.Group>
-                    <Button variant="primary" type="submit">
+                    <Button variant="outline-primary" size="sm" type="submit">
                         Registrati
                     </Button>
                 </Form>

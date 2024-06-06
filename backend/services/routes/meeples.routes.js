@@ -2,14 +2,14 @@ import { Router } from "express";
 import Meeple from "../models/meeple.model.js";
 import Game from "../models/game.model.js";
 import bcrypt from "bcryptjs";
-import { authMidd, generateJWT } from "../auth/index.js";
+import { generateJWT } from "../auth/index.js";
 import validatePassword from "../middlewares/pwdCheck.js";
 import passport from "passport";
 
 export const meeplesRoute = Router();
 
 // Get all meeples
-meeplesRoute.get("/", async (req, res) => { //! reinserire authMidd
+meeplesRoute.get("/", async (req, res) => {
     let meeples = await Meeple.find({});
     res.send(meeples);
 });
@@ -33,17 +33,6 @@ meeplesRoute.post("/login", async ({body}, res, next) => {
         next(err);
     }
 })
-
-/* da verificare
-meeplesRoute.get("/me", authMidd, async (req, res, next) =>{
-    try {
-        let meeple = await Meeple.findById(req.user.id);
-        res.send(meeple);
-    } catch (err) {
-        next(err);
-    }
-})
-*/
 
 // gAuth Route
 meeplesRoute.get("/googleLogin", passport.authenticate(
@@ -77,7 +66,7 @@ meeplesRoute.post("/signup", validatePassword, async (req, res, next) => {
 });
 
 // Edit meeple with specified :id
-meeplesRoute.put("/:id", authMidd, async (req, res, next) => {
+meeplesRoute.put("/:id", async (req, res, next) => {
     try {
         let meeple = await Meeple.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -89,7 +78,7 @@ meeplesRoute.put("/:id", authMidd, async (req, res, next) => {
 });
 
 // Get meeple with specified :id
-meeplesRoute.get("/:id", authMidd, async (req, res, next) => {
+meeplesRoute.get("/:id", async (req, res, next) => {
     try {
         const meeple = await Meeple.findById(req.params.id)
             .populate('dens', 'name')
@@ -109,7 +98,7 @@ meeplesRoute.get("/:id", authMidd, async (req, res, next) => {
 });
 
 // Get meeple with specified :email
-meeplesRoute.get('/:email', authMidd, async (req, res, next) => {
+meeplesRoute.get('/:email', async (req, res, next) => {
     try {
         const meeple = await Meeple.findOne({ email: req.params.email })
             .populate('dens', 'name');
@@ -123,7 +112,7 @@ meeplesRoute.get('/:email', authMidd, async (req, res, next) => {
 });
 
 // Delete existing meeple with specified :id
-meeplesRoute.delete("/:id", authMidd, async (req, res, next) => {
+meeplesRoute.delete("/:id", async (req, res, next) => {
     try {
         await Meeple.deleteOne({
             _id: req.params.id,
@@ -135,7 +124,7 @@ meeplesRoute.delete("/:id", authMidd, async (req, res, next) => {
 });
 
 // Add game to ownedGames of a meeple
-meeplesRoute.put("/:id/ownedGames", async (req, res) => { //! reinserire authMidd
+meeplesRoute.put("/:id/ownedGames", async (req, res) => {
     const meepleId = req.params.id;
     const { gameId } = req.body;
 
@@ -158,7 +147,7 @@ meeplesRoute.put("/:id/ownedGames", async (req, res) => { //! reinserire authMid
     }
 })
 
-meeplesRoute.put("/:id/wishedGames", async (req, res) => { //! reinserire authMidd
+meeplesRoute.put("/:id/wishedGames", async (req, res) => {
     const meepleId = req.params.id;
     const { gameId } = req.body;
 
@@ -182,7 +171,7 @@ meeplesRoute.put("/:id/wishedGames", async (req, res) => { //! reinserire authMi
 })
 
 // Route to remove a game from ownedGames
-meeplesRoute.post('/:id/removeOwnedGame', async (req, res, next) => {//! reinserire authMidd
+meeplesRoute.post('/:id/removeOwnedGame', async (req, res, next) => {
     try {
         const { gameId } = req.body;
         const meeple = await Meeple.findByIdAndUpdate(
@@ -197,7 +186,7 @@ meeplesRoute.post('/:id/removeOwnedGame', async (req, res, next) => {//! reinser
 });
 
 // Route to remove a game from wishedGames
-meeplesRoute.post('/:id/removeWishedGame', async (req, res, next) => { //! reinserire authMidd
+meeplesRoute.post('/:id/removeWishedGame', async (req, res, next) => {
     try {
         const { gameId } = req.body;
         const meeple = await Meeple.findByIdAndUpdate(

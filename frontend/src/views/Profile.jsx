@@ -65,13 +65,11 @@ const Profile = () => {
                 <Col md={4}>
                     <MeeplePersonalInfo meeple={profileData} updateMeeple={updateMeeple} />
                 </Col>
-                <Col md={4}>
+                <Col md={5}>
                     <PlannedGames plannedGames={profileData.plannedGames} />
                 </Col>
-                <Col md={4}>
+                <Col md={3}>
                     <MeepleOwnedGames ownedGames={profileData.ownedGames} handleRemoveGame={handleRemoveGame} />
-                </Col>
-                <Col md={4}>
                     <MeepleWishedGames wishedGames={meeple.wishedGames} handleRemoveGame={handleRemoveGame} />
                 </Col>
             </Row>

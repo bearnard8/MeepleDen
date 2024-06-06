@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("meeple", JSON.stringify(data.meeple));
                 setMeeple(data.meeple);
+                navigate(`/home`)
             }
         } catch (error) {
             console.error("Error during login: ", error);
@@ -70,11 +71,17 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("meeple", JSON.stringify(data.meeple));
                 setMeeple(data.meeple);
+                navigate("/home")
             }
         } catch (error) {
             console.error("Error during sign-up", error)
         }
     };
+
+    const handleGoogleLogin = () => {
+        const str = `http://localhost:3001/api/meeples/googleLogin`;
+        window.open(str, "_self");
+    }
 
     const googleLogin = async () => {
         const params = new URLSearchParams(window.location.search);
@@ -127,7 +134,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ meeple, login, googleLogin, signup, updateMeeple, logout }}>
+        <AuthContext.Provider value={{ meeple, login, handleGoogleLogin, googleLogin, signup, updateMeeple, logout }}>
             {children}
         </AuthContext.Provider>
     );

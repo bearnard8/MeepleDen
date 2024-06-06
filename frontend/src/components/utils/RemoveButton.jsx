@@ -24,7 +24,7 @@ const RemoveButton = ({ game, listType, handleRemoveGame }) => {
 
     return (
         <>
-            <Button variant="danger" onClick={handleShowModal} className="ml-2" > Remove </Button>
+            <Button variant="outline-danger" size="sm" onClick={handleShowModal} className="mx-2" > Remove </Button>
 
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
@@ -32,8 +32,8 @@ const RemoveButton = ({ game, listType, handleRemoveGame }) => {
                 </Modal.Header>
                 <Modal.Body>Are you sure you want to remove this game from your {listType}</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}> Cancel </Button>
-                    <Button variant="danger" onClick={handleConfirmRemove}> Confirm </Button>
+                    <Button variant="outline-secondary" size="sm" onClick={handleCloseModal}> Cancel </Button>
+                    <Button variant="outline-danger" size="sm" onClick={handleConfirmRemove}> Confirm </Button>
                 </Modal.Footer>
             </Modal>
 

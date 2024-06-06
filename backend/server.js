@@ -14,6 +14,7 @@ import {
     notFoundHandler,
     unauthorizedHandler,
 } from "./services/middlewares/errorHandler.js";
+import { authMidd } from "./services/auth/index.js";
 import passport from "passport";
 import googleStrategy from "./services/auth/passport.js"
 
@@ -31,6 +32,12 @@ passport.use("google", googleStrategy);
 app.use(logger);
 
 // Routes
+/*app.use("/api/dens", authMidd,  densRoute);
+app.use("/api/meeples", authMidd,  meeplesRoute);
+app.use("/api/games", authMidd,  gamesRoute);
+app.use("/api/plannedGames", authMidd,  plannedGamesRoute);
+app.use("/api/latestGames",  latestGamesRoute);*/
+
 app.use("/api/dens", densRoute);
 app.use("/api/meeples", meeplesRoute);
 app.use("/api/games", gamesRoute);

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ListGroup, Alert, Spinner, Button } from "react-bootstrap";
+import { ListGroup, Alert, Spinner, Button, Col, Row, Container } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext"
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const PlannedGames = () => {
     const { meeple, token } = useAuth();
-    const navigate = useNavigate();
     const [plannedGames, setPlannedGames] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -59,25 +58,31 @@ const PlannedGames = () => {
     }
 
     return (
-        <ListGroup>
-            {plannedGames.map(game => (
-                <ListGroup.Item key={game._id}>
-                    <div>
-                        <strong>Game:</strong> {game.game.name}
-                    </div>
-                    <div>
-                        <strong>Den:</strong> {game.den.name}
-                    </div>
-                    <div>
-                        <strong>Date:</strong> {new Date(game.date).toLocaleString()}
-                    </div>
-                    <div>
-                        <strong>Location:</strong> {game.location}
-                    </div>
-                    <Button onClick={() => navigate('/some-path')}>Vai al Den</Button> {/* modificare il navigate in modo da mandare al den della giocata */}
-                </ListGroup.Item>
-            ))}
-        </ListGroup>
+        <Container>
+            <Row> 
+                <h3>Planned Games</h3>
+                <ListGroup>
+                    {plannedGames.map(game => (
+                        <ListGroup.Item key={game._id} className="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Game:</strong> {game.game.name}<br />
+                                <strong>Den:</strong> {game.den.name}<br />
+                                <strong>Date:</strong> {new Date(game.date).toLocaleString()}<br />
+                                <strong>Location:</strong> {game.location}
+                            </div>
+                            <Button 
+                                variant="outline-primary" 
+                                size="sm" 
+                                as={Link} 
+                                to={`/den/${game.den._id}`}
+                            >
+                                Vai al Den
+                            </Button>
+                        </ListGroup.Item>
+                    ))}
+                </ListGroup>
+            </Row>
+        </Container>
     );
 };
 

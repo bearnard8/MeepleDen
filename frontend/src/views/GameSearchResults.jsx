@@ -70,8 +70,8 @@ const GameSearchResults = () => {
                 {games.map(game => (
                     <ListGroup.Item key={game._id}>
                         {game.name}
-                        <Button onClick={() => addToOwnedGames(game._id)}>Add to Owned Games</Button>
-                        <Button onClick={() => addToWishedGames(game._id)}>Add to Wished Games</Button>
+                        <Button size="sm" onClick={() => addToOwnedGames(game._id)}>Add to Owned Games</Button>
+                        <Button size="sm" onClick={() => addToWishedGames(game._id)}>Add to Wished Games</Button>
                     </ListGroup.Item>
                 ))}
             </ListGroup>

@@ -2,18 +2,17 @@ import { Router } from "express";
 import Den from "../models/den.model.js";
 import Game from "../models/game.model.js";
 import Meeple from "../models/meeple.model.js"
-import { authMidd } from "../auth/index.js";
 
 export const densRoute = Router();
 
 // Get all dens
-densRoute.get("/", authMidd, async (req, res) => {
+densRoute.get("/", async (req, res) => {
     let dens = await Den.find({});
     res.send(dens);
 });
 
 // Get den with specified :id
-densRoute.get("/:id", async (req, res, next) => { //!  authMidd,
+densRoute.get("/:id", async (req, res, next) => {
     try {
         let den = await Den.findById(req.params.id)
             .populate("members", "nickname")
@@ -31,8 +30,8 @@ densRoute.get("/:id", async (req, res, next) => { //!  authMidd,
     }
 });
 
-// Create a new den
-densRoute.post("/", authMidd, async (req, res, next) => {
+// Create a new den 
+densRoute.post("/", async (req, res, next) => {
     try {
         let den = await Den.create(req.body);
         res.status(200).send(den);
@@ -42,7 +41,7 @@ densRoute.post("/", authMidd, async (req, res, next) => {
 });
 
 // Modify existing den with specified :id
-densRoute.put("/:id", async (req, res, next) => { //! rimettere authMidd
+densRoute.put("/:id", async (req, res, next) => {
     try {
         let den = await Den.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -54,7 +53,7 @@ densRoute.put("/:id", async (req, res, next) => { //! rimettere authMidd
 });
 
 // Delete existing den with specified :id
-densRoute.delete("/:id", authMidd, async (req, res, next) => {
+densRoute.delete("/:id", async (req, res, next) => {
     try {
         await Den.deleteOne({
             _id: req.params.id,
@@ -66,7 +65,7 @@ densRoute.delete("/:id", authMidd, async (req, res, next) => {
 });
 
 // Add meeple to a den
-densRoute.put("/:id/addMeeple", async (req, res, next) => { //! reinserire authMidd
+densRoute.put("/:id/addMeeple", async (req, res, next) => {
     const denId = req.params.id;
     const { meepleId } = req.body;
 
@@ -97,7 +96,7 @@ densRoute.put("/:id/addMeeple", async (req, res, next) => { //! reinserire authM
 });
 
 // Add game to ownedGames of a den
-densRoute.put("/:id/addGame", async (req, res, next) => { //! reinserire authMidd
+densRoute.put("/:id/addGame", async (req, res, next) => {
     const denId = req.params.id;
     const { gameId } = req.body;
 
@@ -121,7 +120,7 @@ densRoute.put("/:id/addGame", async (req, res, next) => { //! reinserire authMid
 })
 
 // Add game to den's wishlist
-densRoute.put("/dens/:id/wishedGames", authMidd, async (req, res, next) => {
+densRoute.put("/dens/:id/wishedGames", async (req, res, next) => {
     const { gameId } = req.body;
 
     try {

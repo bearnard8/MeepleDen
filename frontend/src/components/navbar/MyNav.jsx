@@ -30,6 +30,10 @@ export default function MyNav() {
         navigate(`/search?query=${searchQuery}`);
     }
 
+    if (!meeple || !meeple._id) {
+        return null; // Non renderizzare nulla se il meeple non è loggato
+    }
+
     return (
         <Navbar expand="lg" className='d-flex align-items-center'>
             <Container>

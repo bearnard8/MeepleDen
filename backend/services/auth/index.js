@@ -45,6 +45,7 @@ export const authMidd = async (req, res, next) => {
                 });
                 if (me) {
                     req.user = me;
+                    console.log("User: ", req.user)
                     next();
                 } else res.status(401).send({ error: "Meeple not found."});
             } else res.status(401).send({ error: "Please login again"});

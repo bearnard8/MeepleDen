@@ -71,33 +71,52 @@ densRoute.delete("/:id", async (req, res, next) => {
 });
 
 // Add meeple to a den
-densRoute.put("/:id/addMeeple", async (req, res, next) => {
-    const denId = req.params.id;
-    const { meepleId } = req.body;
+densRoute.post("/:denId/addMeeple", async (req, res) => {
+    try {
+        const { denId } = req.params;
+        const { nickname } = req.body;
+        console.log(denId)
+        console.log(nickname)
 
-    try{
-        const den = await Den.findById(denId);
-        const meeple = await Meeple.findById(meepleId);
-
-        if (!den || !meeple) {
-            return res.status(404).json({ message: `Den or Meeple not found` });
+        // Trova il meeple per nickname
+        const meeple = await Meeple.findOne({ nickname });
+        if (!meeple) {
+            return res.status(404).json({ message: 'Meeple not found' });
         }
 
-        if (!den.members.includes(meepleId)) {
-            den.members.push(meepleId);
-            await den.save();
-        } else {
-            res.status(404).json({ error: "This meeple is already a member of the den" });
-        }
+        // Aggiungi il meeple al den
+        const den = await Den.findByIdAndUpdate(
+            denId,
+            { $addToSet: { members: meeple._id } },
+            { new: true }
+        ).populate('members');
 
-        if(!meeple.dens.includes(denId)) {
-            meeple.dens.push(denId);
-            await meeple.save();
-        }
+        // Aggiungi il den al meeple
+        await Meeple.findByIdAndUpdate(meeple._id, { $addToSet: { dens: denId } });
 
         res.status(200).json(den);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Failed to add meeple', error });
+    }
+});
+
+// Remove meeple from a den
+densRoute.post('/:denId/removeMeeple', async (req, res) => {
+    try {
+        const { denId } = req.params;
+        const { meepleId } = req.body;
+
+        const den = await Den.findByIdAndUpdate(
+            denId,
+            { $pull: { members: meepleId } },
+            { new: true }
+        ).populate('members');
+
+        await Meeple.findByIdAndUpdate(meepleId, { $pull: { dens: denId } });
+
+        res.status(200).json(den);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to remove meeple', error });
     }
 });
 

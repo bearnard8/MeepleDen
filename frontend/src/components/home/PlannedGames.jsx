@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ListGroup, Alert, Spinner, Button, Col, Row, Container } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext"
 import { Link } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const PlannedGames = () => {
     const { meeple, token } = useAuth();
@@ -34,7 +35,8 @@ const PlannedGames = () => {
                 }
             } catch (error) {
                 setError(error.message);
-                console.error(`There was an error finding planned games`, error);
+                console.error("There was an error finding planned games", error);
+                toast.error("There was an error finding planned games")
             } finally {
                 setLoading(false);
             }
@@ -58,9 +60,8 @@ const PlannedGames = () => {
     }
 
     return (
-        <Container>
+        <Container className="my-2">
             <Row> 
-                <h3>Planned Games</h3>
                 <ListGroup>
                     {plannedGames.map(game => (
                         <ListGroup.Item key={game._id} className="d-flex justify-content-between align-items-center">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from "react-bootstrap";
-import LatestGames from "../components/home/LatestGames";
+import LatestGames from "../components/home/LatestGames/LatestGames.jsx";
 import PlannedGames from "../components/home/PlannedGames";
 import Rankings from "../components/home/Rankings";
 import { useAuth } from '../context/AuthContext';

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ListGroup, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { toast } from "react-toastify";
 
 const SurveyList = ({ denId }) => {
     const { token } = useAuth();
@@ -19,6 +20,7 @@ const SurveyList = ({ denId }) => {
                 setSurveys(data);
             } catch (error) {
                 console.error('Error fetching surveys:', error);
+                toast.error('Error fetching surveys');
             }
         };
 

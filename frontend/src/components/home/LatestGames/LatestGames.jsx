@@ -1,33 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
-import { Container, Card, Button, Row, Col } from "react-bootstrap";
-import { useAuth } from '../../context/AuthContext';
-import { toast } from 'react-toastify';
-import './GameSearchResults.css';
+import { Container, ListGroup, Button, Row, Col } from 'react-bootstrap';
+import { useAuth } from '../../../context/AuthContext';
+import { toast } from "react-toastify";
+import './LatestGames.css';
 
-const GameSearchResults = () => {
+const LatestGames = () => {
     const { meeple, token } = useAuth();
-    const [ games, setGames ] = useState([]);
-    const location = useLocation();
-    const navigate = useNavigate();
-    const query = new URLSearchParams(location.search).get("query");
+    const [games, setGames] = useState([]);
 
     useEffect(() => {
-        const fetchGames = async () => {
+        const fetchLatestGames = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/api/games/search?query=${query}`);
+                const response = await fetch('http://localhost:3001/api/latestGames', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const data = await response.json();
                 setGames(data);
             } catch (error) {
-                console.error("Error fetching games: ", error);
-                toast.error("Error fetching games");
+                console.error('Error fetching latest games:', error);
+                toast.error("Error fetching latest games")
             }
         };
 
-        if (query) {
-            fetchGames();
-        }
-    }, [query]);
+        fetchLatestGames();
+    }, [token]);
 
     const addToOwnedGames = async (gameId) => {
         try {
@@ -40,12 +38,11 @@ const GameSearchResults = () => {
                 body: JSON.stringify({ gameId })
             });
             const data = await response.json();
-            toast.success('Game added to owned games');
+            toast.success("Game added to owned games")
         } catch (error) {
             console.error(`Error adding game to owned games: `, error);
-            toast.error('Error adding game to owned games');
+            toast.error("Error adding game to owned games")
         }
-        navigate(`/meeple/${meeple._id}`);
     };
 
     const addToWishedGames = async (gameId) => {
@@ -60,32 +57,27 @@ const GameSearchResults = () => {
             });
             const data = await response.json();
             toast.success('Game added to wished games');
-        } catch (error) { 
+        } catch (error) {
             console.error('Error adding game to wished games:', error);
             toast.error('Error adding game to wished games');
         }
-        navigate(`/meeple/${meeple._id}`);
     };
-
 
     return (
         <Container>
-            <h1>Search Results</h1>
-            <Row>
+            <ListGroup>
                 {games.map(game => (
-                    <Col key={game._id} sm={12} md={6} lg={4} className="mb-4">
-                        <Card className="game-card h-100">
-                            {/*<Card.Img variant="top" src={game.cover} alt={game.name} />*/}
-                            <Card.Body className="d-flex flex-column">
-                                <Card.Title>{game.name}</Card.Title>
-                                <Card.Text className="flex-grow-1">
+                    <ListGroup.Item key={game._id} className="game-item">
+                        <Row>
+                            {/*<Col md={4} className="d-flex align-items-center">
+                                <img src={game.cover} alt={game.name} className="game-cover" />
+                            </Col>*/}
+                            <Col>
+                                <h5>{game.name}</h5>
+                                <p>
                                     <strong>Description:</strong> {game.description}
                                     <br />
-                                    <strong>Release Date:</strong> {new Date(game.releaseDate).toLocaleDateString()}
-                                    <br />
                                     <strong>Genre:</strong> {game.genre}
-                                    <br />
-                                    <strong>Developer:</strong> {game.developer}
                                     <br />
                                     <strong>Platforms:</strong> {game.platform.join(', ')}
                                     <br />
@@ -94,18 +86,18 @@ const GameSearchResults = () => {
                                     <strong>Players:</strong> {game.players.min} - {game.players.max}
                                     <br />
                                     <strong>Duration:</strong> {game.duration} minutes
-                                </Card.Text>
-                                <div className="button-group">
+                                </p>
+                                <div className="button-group d-flex justify-content-center">
                                     <Button size="sm" variant='outline-primary' className='mx-2' onClick={() => addToOwnedGames(game._id)}>Add to Owned Games</Button>
                                     <Button size="sm" variant='outline-primary' className='mx-2' onClick={() => addToWishedGames(game._id)}>Add to Wished Games</Button>
                                 </div>
-                            </Card.Body>
-                        </Card>
-                    </Col>
+                            </Col>
+                        </Row>
+                    </ListGroup.Item>
                 ))}
-            </Row>
+            </ListGroup>
         </Container>
     );
 };
 
-export default GameSearchResults;
+export default LatestGames;

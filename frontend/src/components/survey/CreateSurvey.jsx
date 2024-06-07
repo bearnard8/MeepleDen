@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const CreateSurvey = ({ denId, games, onClose }) => {
     const { token, meeple } = useAuth();
@@ -42,11 +43,12 @@ const CreateSurvey = ({ denId, games, onClose }) => {
         });
 
         if (response.ok) {
-            console.log('Survey created successfully');
+            toast.success('Survey created successfully');
             onClose();
             navigate(`/den/${denId}`);
         } else {
             console.log('Failed to create survey');
+            toast.error('Error creating survey');
         }
     };
 

@@ -113,7 +113,7 @@ const Den = () => {
                                 required
                             />
                         </Form.Group>
-                        <Button variant="primary" type="submit" className="mt-2">
+                        <Button variant="outline-primary" size="sm" type="submit" className="my-2">
                             Add Meeple
                         </Button>
                     </Form>
@@ -121,8 +121,8 @@ const Den = () => {
             </Row>
             <Row>
                 <Col md={12}>
-                    <Button variant="outline-primary" size="sm" onClick={() => setShowSurveyModal(true)}>Create Survey</Button>
                     <SurveyList denId={denId}/>
+                    <Button variant="outline-primary" size="sm" className='my-2' onClick={() => setShowSurveyModal(true)}>Create Survey</Button>
                 </Col>
             </Row>
             <Modal show={showSurveyModal} onHide={() => setShowSurveyModal(false)}>

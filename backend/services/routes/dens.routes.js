@@ -11,6 +11,22 @@ densRoute.get("/", async (req, res) => {
     res.send(dens);
 });
 
+// Create a new den 
+densRoute.post("/create", async (req, res, next) => {
+    try {
+        const { name, description, owner } = req.body;
+
+        const newDen = new Den({ name, description, owner, vipStatus: false });
+        await newDen.save();
+
+        await Meeple.findByIdAndUpdate(owner, { $addToSet: { dens: newDen._id } });
+
+        res.status(201).json(newDen);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to create den', error });
+    }
+});
+
 // Get den with specified :id
 densRoute.get("/:id", async (req, res, next) => {
     try {
@@ -24,16 +40,6 @@ densRoute.get("/:id", async (req, res, next) => {
         if (!den) {
             res.status(404).json({ error: "Den not found" });
         }
-        res.status(200).send(den);
-    } catch (err) {
-        next(err);
-    }
-});
-
-// Create a new den 
-densRoute.post("/", async (req, res, next) => {
-    try {
-        let den = await Den.create(req.body);
         res.status(200).send(den);
     } catch (err) {
         next(err);

@@ -6,8 +6,9 @@ import { config } from "dotenv";
 import { densRoute } from "./services/routes/dens.routes.js";
 import { meeplesRoute } from "./services/routes/meeples.routes.js";
 import { gamesRoute } from "./services/routes/games.routes.js";
-import { plannedGamesRoute } from "./services/routes/plannedGames.route.js"
-import { latestGamesRoute } from "./services/routes/latestGames.route.js";
+import { surveyRoute } from "./services/routes/survey.routes.js";
+import { plannedGamesRoute } from "./services/routes/plannedGames.routes.js"
+import { latestGamesRoute } from "./services/routes/latestGames.routes.js";
 import {
     badRequestHandler,
     genericErrorHandler,
@@ -43,6 +44,7 @@ app.use("/api/meeples", meeplesRoute);
 app.use("/api/games", gamesRoute);
 app.use("/api/plannedGames", plannedGamesRoute);
 app.use("/api/latestGames", latestGamesRoute);
+app.use("/api/survey", surveyRoute);
 
 // Error Middlewares
 app.use(badRequestHandler);

@@ -20,7 +20,7 @@ const denSchema = new Schema(
         }],
         denAvatar: {
             type: String,
-            required: true
+            required: false
         },
         ownedGames: [{
             type: Schema.Types.ObjectID,

@@ -86,12 +86,15 @@ const Den = () => {
         return <div>Loading...</div>;
     }
 
+    const owner = den.members.find((member) => member._id === den.owner);
+
     return (
         <Container>
-            <h1>Den Details</h1>
+            <h2>{den.name}</h2>
+            <h6>The owner of this den is: {owner ? owner.nickname : 'Unknown'}</h6>
             <Row>
                 <Col md={4}>
-                    <DenMembers members={den.members} onRemoveMeeple={handleRemoveMeeple} />
+                    <DenMembers members={den.members} ownerId={den.owner} onRemoveMeeple={handleRemoveMeeple} />
                 </Col>
                 <Col md={4}>
                     <DenPlannedGames plannedGames={den.plannedGames} />

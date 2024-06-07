@@ -16,7 +16,7 @@ densRoute.post("/create", async (req, res, next) => {
     try {
         const { name, description, owner } = req.body;
 
-        const newDen = new Den({ name, description, owner, vipStatus: false });
+        const newDen = new Den({ name, description, owner, vipStatus: false, members: [owner] });
         await newDen.save();
 
         await Meeple.findByIdAndUpdate(owner, { $addToSet: { dens: newDen._id } });
@@ -75,8 +75,6 @@ densRoute.post("/:denId/addMeeple", async (req, res) => {
     try {
         const { denId } = req.params;
         const { nickname } = req.body;
-        console.log(denId)
-        console.log(nickname)
 
         // Trova il meeple per nickname
         const meeple = await Meeple.findOne({ nickname });

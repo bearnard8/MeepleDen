@@ -27,6 +27,27 @@ const SurveyList = ({ denId }) => {
         fetchSurveys();
     }, [denId, token]);
 
+    const deleteSurvey = async (surveyId) => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/survey/${surveyId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete survey');
+            }
+
+            setSurveys(surveys.filter(survey => survey._id !== surveyId));
+            toast.success('Survey deleted successfully');
+        } catch (error) {
+            console.error('Error deleting survey:', error);
+            toast.error('Error deleting survey');
+        }
+    };
+
     return (
         <Container>
             <Row>
@@ -53,8 +74,11 @@ const SurveyList = ({ denId }) => {
                                         ))}
                                     </ul>
                                 </div>
-                                <Button size="sm" variant="outline-primary" as={Link} to={`/survey/${survey._id}`}>
+                                <Button variant="outline-primary" size="sm" className="mx-1" as={Link} to={`/survey/${survey._id}`}>
                                     Respond to Survey
+                                </Button>
+                                <Button variant="outline-danger" size="sm" onClick={() => deleteSurvey(survey._id)}>
+                                    Delete Survey
                                 </Button>
                             </ListGroup.Item>
                         ))}

@@ -97,12 +97,17 @@ surveyRoute.post('/respond', async (req, res) => {
     }
 });
 
-surveyRoute.delete('/:id', async (req, res) => {
+surveyRoute.delete('/:surveyId', async (req, res, next) => {
     try {
         const { surveyId } = req.params;
-        await Survey.findByIdAndDelete(surveyId);
-        res.status(200).send({ message: 'Survey deleted successfully' });
+        const survey = await Survey.findByIdAndDelete(surveyId);
+
+        if (!survey) {
+            return res.status(404).json({ message: 'Survey not found' });
+        }
+
+        res.status(200).json({ message: 'Survey deleted successfully' });
     } catch (error) {
-        res.status(500).send({ message: 'Failed to delete survey', error });
+        next(error);
     }
 });

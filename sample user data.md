@@ -77,5 +77,19 @@
     "nickname": "grace_m",
     "email": "grace.martinez@example.com",
     "password": "P@ssw0rd7"
+  },
+  {
+    "name": "Franco",
+    "surname": "Rossi",
+    "nickname": "franco_rossi",
+    "email": "franco.rossi@example.com",
+    "password": "Franco!rossi2"
+  },
+  {
+    "name": "Paolo",
+    "surname": "Marco",
+    "nickname": "paolo_marco",
+    "email": "paolo.marco@example.com",
+    "password": "Paolo!marco2"
   }
 ]

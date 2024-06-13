@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import {Container, Nav, Navbar, NavDropdown, Form, Button} from "react-bootstrap";
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from "react-router-dom";
-import { FaCrown } from "react-icons/fa6";
 import logo from "../../assets/logo2.jpg";
 
 export default function MyNav() {

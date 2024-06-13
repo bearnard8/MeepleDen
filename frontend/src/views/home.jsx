@@ -6,7 +6,7 @@ import Rankings from "../components/home/Rankings";
 import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
-    const { meeple } = useAuth(); //! da verificare
+    const { meeple } = useAuth();
     
     if (!meeple) {
         return null;

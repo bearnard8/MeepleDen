@@ -57,16 +57,17 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const signup = async ({ name, surname, nickname, email, password }) => {
+    const signup = async ({ name, surname, nickname, email, password, avatar }) => {
         try {
             const response = await fetch ("http://localhost:3001/api/meeples/signup", { 
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ name, surname, nickname, email, password })
+                body: JSON.stringify({ name, surname, nickname, email, password, avatar })
             });
             const data = await response.json();
+            console.log(data);
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("meeple", JSON.stringify(data.meeple));
@@ -107,7 +108,7 @@ export const AuthProvider = ({ children }) => {
 
     const updateMeeple = async (updatedMeeple) => {
         try {
-            const response = await fetch(`http://localhost:3001/api/meeples/${updatedMeeple._id}`, {
+            const response = await fetch(`http://localhost:3001/api/meeples/${meeple._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -116,8 +117,8 @@ export const AuthProvider = ({ children }) => {
                 body: JSON.stringify(updatedMeeple)
             });
             const data = await response.json();
-            localStorage.setItem("meeple", JSON.stringify(data));
             setMeeple(data);
+            localStorage.setItem("meeple", JSON.stringify(data));
         } catch (error) {
             console.error("There was an error while updating meeple", error)
         }

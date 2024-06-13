@@ -33,18 +33,19 @@ passport.use("google", googleStrategy);
 app.use(logger);
 
 // Routes
-/*app.use("/api/dens", authMidd,  densRoute);
-app.use("/api/meeples", authMidd,  meeplesRoute);
-app.use("/api/games", authMidd,  gamesRoute);
-app.use("/api/plannedGames", authMidd,  plannedGamesRoute);
-app.use("/api/latestGames",  latestGamesRoute);*/
+app.use("/api/dens",  densRoute);
+app.use("/api/meeples",  meeplesRoute);
+app.use("/api/games",  gamesRoute);
+app.use("/api/plannedGames",  plannedGamesRoute);
+app.use("/api/latestGames",  latestGamesRoute);
+app.use("/api/survey", surveyRoute);
 
-app.use("/api/dens", authMidd, densRoute);
+/*app.use("/api/dens", authMidd, densRoute);
 app.use("/api/meeples", authMidd, meeplesRoute);
 app.use("/api/games", authMidd, gamesRoute);
 app.use("/api/plannedGames", authMidd, plannedGamesRoute);
 app.use("/api/latestGames", authMidd, latestGamesRoute);
-app.use("/api/survey", authMidd, surveyRoute);
+app.use("/api/survey", authMidd, surveyRoute);*/
 
 // Error Middlewares
 app.use(badRequestHandler);

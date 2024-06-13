@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Router } from "express";
 import Meeple from "../models/meeple.model.js";
 import Game from "../models/game.model.js";
@@ -5,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { generateJWT } from "../auth/index.js";
 import validatePassword from "../middlewares/pwdCheck.js";
 import passport from "passport";
+import { parser } from '../auth/cloudinaryConfig.js';
 
 export const meeplesRoute = Router();
 
@@ -52,7 +54,7 @@ meeplesRoute.get("/callback", passport.authenticate("google", {session: false}) 
 )
 
 // Create new meeple
-meeplesRoute.post("/signup", validatePassword, async (req, res, next) => {
+/*meeplesRoute.post("/signup", validatePassword, async (req, res, next) => {
     try {
         let meeple = await Meeple.create({
             ...req.body,
@@ -63,17 +65,50 @@ meeplesRoute.post("/signup", validatePassword, async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+});*/
+
+meeplesRoute.post("/signup", validatePassword, async (req, res, next) => {
+    try {
+        console.log('Signup request received', req.body);
+        const { name, surname, nickname, email, password, avatar } = req.body;
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newMeeple = new Meeple({
+            name,
+            surname,
+            nickname,
+            email,
+            password: hashedPassword,
+            avatar
+        });
+
+        await newMeeple.save();
+
+        const token = generateJWT({
+            email: newMeeple.email
+        })
+
+        // invio mail automatica alla registrazione (se necessario)
+        res.status(200).json({ meeple: newMeeple, token });
+    } catch (err) {
+        next(err);
+    }
 });
 
 // Edit meeple with specified :id
-meeplesRoute.put("/:id", async (req, res, next) => {
+meeplesRoute.put("/:meepleId", async (req, res, next) => {
     try {
-        let meeple = await Meeple.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-        });
-        res.status(200).send(meeple);
+        const { meepleId } = req.params;
+        // Controlla se l'ID è un ObjectId valido
+        if (!mongoose.Types.ObjectId.isValid(meepleId)) {
+            return res.status(400).json({ message: "Invalid meeple ID" });
+        }
+
+        const updatedMeeple = await Meeple.findByIdAndUpdate(meepleId, req.body, { new: true });
+        res.status(200).json(updatedMeeple);
     } catch (err) {
-        next(err)
+        next(err);
     }
 });
 
@@ -147,6 +182,7 @@ meeplesRoute.put("/:id/ownedGames", async (req, res) => {
     }
 })
 
+// Add game to wishedGames of a meeple
 meeplesRoute.put("/:id/wishedGames", async (req, res) => {
     const meepleId = req.params.id;
     const { gameId } = req.body;
@@ -197,5 +233,23 @@ meeplesRoute.post('/:id/removeWishedGame', async (req, res, next) => {
         res.json(meeple);
     } catch (error) {
         next(error);
+    }
+});
+
+// Route to update meeple's avatar
+meeplesRoute.put('/:meepleId/avatar', parser.single('avatar'), async (req, res) => {
+    try {
+        const { meepleId } = req.params;
+        const avatar = req.file.path;
+
+        const updatedMeeple = await Meeple.findByIdAndUpdate(meepleId, { avatar }, { new: true });
+
+        if (!updatedMeeple) {
+            return res.status(404).json({ message: 'Meeple not found' });
+        }
+
+        res.status(200).json(updatedMeeple);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update avatar', error });
     }
 });

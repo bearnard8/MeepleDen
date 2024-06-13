@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ListGroup, Alert, Spinner, Button, Col, Row, Container } from "react-bootstrap";
+import { ListGroup, Alert, Spinner, Button, Row, Container } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext"
 import { Link } from 'react-router-dom';
 import { toast } from "react-toastify";

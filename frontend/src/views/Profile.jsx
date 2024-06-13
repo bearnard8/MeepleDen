@@ -7,8 +7,7 @@ import MeepleOwnedGames from '../components/meeple/MeepleOwnedGames';
 import MeepleWishedGames from '../components/meeple/MeepleWishedGames.jsx';
 
 const Profile = () => {
-    const { meeple, updateMeeple } = useAuth();
-    const { token } = useAuth();
+    const { meeple, updateMeeple, token } = useAuth();
     const [ profileData, setProfileData ] = useState(null);
 
     useEffect(() => {
@@ -16,7 +15,7 @@ const Profile = () => {
             try {
                 const response = await fetch(`http://localhost:3001/api/meeples/${meeple._id}`, {
                     headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                        "Authorization": `Bearer ${token}`
                     }
                 });
                 const data = await response.json();

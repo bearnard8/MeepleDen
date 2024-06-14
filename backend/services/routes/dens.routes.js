@@ -31,7 +31,7 @@ densRoute.post("/create", async (req, res, next) => {
 densRoute.get("/:id", async (req, res, next) => {
     try {
         let den = await Den.findById(req.params.id)
-            .populate("members", "nickname")
+            .populate("members", ["nickname", "avatar"])
             .populate("ownedGames", "name")
             .populate({
                 path: "plannedGames",

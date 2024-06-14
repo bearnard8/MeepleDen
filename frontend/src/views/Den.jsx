@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import DenMembers from '../components/den/DenMembers.jsx';
 import DenPlannedGames from '../components/den/DenPlannedGames.jsx';
 import DenOwnedGames from '../components/den/DenOwnedGames.jsx';
@@ -9,28 +9,34 @@ import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 
 const Den = () => {
+    const navigate = useNavigate();
     const { denId } = useParams();
     const { token } = useAuth();
     const [den, setDen] = useState(null);
     const [showSurveyModal, setShowSurveyModal] = useState(false);
     const [games, setGames] = useState([]);
-    const [nickname, setNickname] = useState();
+    const [nickname, setNickname] = useState('');
+
+    const fetchDen = async () => {
+        try {
+            if (!denId) {
+                console.error("Den id is undefined");
+                return;
+            }
+
+            const response = await fetch(`http://localhost:3001/api/dens/${denId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            setDen(data);
+        } catch (error) {
+            console.error("Error fetching den data: ", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchDen = async () => {
-            try {
-                const response = await fetch(`http://localhost:3001/api/dens/${denId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const data = await response.json();
-                setDen(data);
-                setGames(data.ownedGames);
-            } catch (error) {
-                console.error("Error fetching den data: ", error);
-            }
-        };
         fetchDen();
     }, [denId, token]);
 
@@ -47,8 +53,7 @@ const Den = () => {
             });
 
             if (response.ok) {
-                const updatedDen = await response.json();
-                setDen(updatedDen);
+                await fetchDen(); // Refetch the den data after adding a member
                 setNickname('');
             } else {
                 alert('Failed to add meeple');
@@ -71,8 +76,7 @@ const Den = () => {
             });
 
             if (response.ok) {
-                const updatedDen = await response.json();
-                setDen(updatedDen);
+                await fetchDen(); // Refetch the den data after removing a member
             } else {
                 alert('Failed to remove meeple');
             }
@@ -80,6 +84,17 @@ const Den = () => {
             console.error('Error removing meeple:', error);
             alert('Failed to remove meeple');
         }
+    };
+
+    const handleSurveyCreated = () => {
+        fetchDen();
+        navigate(`/den/${denId}`);
+    };
+
+    const handleCloseSurveyModal = () => {
+        setShowSurveyModal(false);
+        navigate(`/den/${denId}`);
+        console.log("Ho navigato ai den");
     };
 
     if (!den) {
@@ -100,14 +115,14 @@ const Den = () => {
                     <DenPlannedGames plannedGames={den.plannedGames} />
                 </Col>
                 <Col md={4}>
-                    <DenOwnedGames ownedGames={den.ownedGames} />
+                    <DenOwnedGames members={den.members} setGames={setGames} />
                 </Col>
             </Row>
             <Row>
-                <Col md={12}>
+                <Col md={12} className='my-2'>
                     <Form onSubmit={handleAddMeeple}>
                         <Form.Group controlId="formMeepleNickname">
-                            <Form.Label>Add Meeple by Nickname</Form.Label>
+                            <Form.Label><strong>Add Meeple</strong> by Nickname</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter meeple nickname"
@@ -124,7 +139,7 @@ const Den = () => {
             </Row>
             <Row>
                 <Col md={12}>
-                    <SurveyList denId={denId}/>
+                    <SurveyList denId={denId} />
                     <Button variant="outline-primary" size="sm" className='my-2' onClick={() => setShowSurveyModal(true)}>Create Survey</Button>
                 </Col>
             </Row>
@@ -133,7 +148,7 @@ const Den = () => {
                     <Modal.Title>Create Survey</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <CreateSurvey denId={denId} games={games} onClose={() => setShowSurveyModal(false)}/>
+                    <CreateSurvey denId={denId} games={games} onClose={handleCloseSurveyModal} onSurveyCreated={handleSurveyCreated} />
                 </Modal.Body>
             </Modal>
         </Container>

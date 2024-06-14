@@ -117,10 +117,12 @@ export const AuthProvider = ({ children }) => {
                 body: JSON.stringify(updatedMeeple)
             });
             const data = await response.json();
-            setMeeple(data);
             localStorage.setItem("meeple", JSON.stringify(data));
+            setMeeple(data);
+            return data;
         } catch (error) {
             console.error("There was an error while updating meeple", error)
+            throw error;
         }
     }
 

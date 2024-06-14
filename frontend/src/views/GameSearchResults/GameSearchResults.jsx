@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
@@ -9,7 +9,6 @@ const GameSearchResults = () => {
     const { meeple, token } = useAuth();
     const [ games, setGames ] = useState([]);
     const location = useLocation();
-    const navigate = useNavigate();
     const query = new URLSearchParams(location.search).get("query");
 
     useEffect(() => {
@@ -30,6 +29,12 @@ const GameSearchResults = () => {
     }, [query]);
 
     const addToOwnedGames = async (gameId) => {
+        console.log("Owned games di meeple: ", meeple.ownedGames);
+        console.log("Game id: ", gameId);
+        if (meeple.ownedGames.includes(gameId)) {
+            toast.warn('This game is already in your owned games list');
+            return;
+        }
         try {
             const response = await fetch(`http://localhost:3001/api/meeples/${meeple._id}/ownedGames`, {
                 method: 'PUT',
@@ -45,10 +50,17 @@ const GameSearchResults = () => {
             console.error(`Error adding game to owned games: `, error);
             toast.error('Error adding game to owned games');
         }
-        navigate(`/meeple/${meeple._id}`);
     };
 
     const addToWishedGames = async (gameId) => {
+        if (meeple.wishedGames.includes(gameId)) {
+            toast.warn('This game is already in your wished games list');
+            return;
+        }
+        if (meeple.ownedGames.includes(gameId)) {
+            toast.warn('You already own this game');
+            return;
+        }
         try {
             const response = await fetch(`http://localhost:3001/api/meeples/${meeple._id}/wishedGames`, {
                 method: 'PUT',
@@ -64,7 +76,6 @@ const GameSearchResults = () => {
             console.error('Error adding game to wished games:', error);
             toast.error('Error adding game to wished games');
         }
-        navigate(`/meeple/${meeple._id}`);
     };
 
 

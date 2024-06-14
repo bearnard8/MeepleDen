@@ -64,28 +64,21 @@ const LatestGames = () => {
     };
 
     return (
-        <Container>
-            <ListGroup>
+        <Container className='mb-5'>
+            <ListGroup id='game-container'>
                 {games.map(game => (
                     <ListGroup.Item key={game._id} className="game-item">
                         <Row>
-                            {/*<Col md={4} className="d-flex align-items-center">
-                                <img src={game.cover} alt={game.name} className="game-cover" />
-                            </Col>*/}
                             <Col>
                                 <h5>{game.name}</h5>
                                 <p>
-                                    <strong>Description:</strong> {game.description}
-                                    <br />
-                                    <strong>Genre:</strong> {game.genre}
-                                    <br />
-                                    <strong>Platforms:</strong> {game.platform.join(', ')}
+                                    {game.description}
                                     <br />
                                     <strong>Rating:</strong> {game.rating}
                                     <br />
-                                    <strong>Players:</strong> {game.players.min} - {game.players.max}
+                                    {game.players.min} - {game.players.max} players
                                     <br />
-                                    <strong>Duration:</strong> {game.duration} minutes
+                                    <strong>Game time:</strong> {game.duration} minutes
                                 </p>
                                 <div className="button-group d-flex justify-content-center">
                                     <Button size="sm" variant='outline-primary' className='mx-2' onClick={() => addToOwnedGames(game._id)}>Add to Owned Games</Button>

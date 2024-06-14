@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ListGroup, Alert, Spinner, Button, Row, Container } from "react-bootstrap";
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../../context/AuthContext"
 import { Link } from 'react-router-dom';
 import { toast } from "react-toastify";
+import "./PlannedGames.css"
 
 const PlannedGames = () => {
     const { meeple, token } = useAuth();
@@ -62,9 +63,9 @@ const PlannedGames = () => {
     return (
         <Container className="my-2">
             <Row> 
-                <ListGroup>
+                <ListGroup id="game-container" className="px-0">
                     {plannedGames.map(game => (
-                        <ListGroup.Item key={game._id} className="d-flex justify-content-between align-items-center">
+                        <ListGroup.Item key={game._id} className="game-item">
                             <div>
                                 <strong>Game:</strong> {game.game.name}<br />
                                 <strong>Den:</strong> {game.den.name}<br />

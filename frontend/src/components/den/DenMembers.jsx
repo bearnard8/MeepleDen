@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListGroup, Button } from 'react-bootstrap';
+import { ListGroup, Button, Image } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 
 const DenMembers = ({ members, ownerId, onRemoveMeeple }) => {
@@ -10,6 +10,7 @@ const DenMembers = ({ members, ownerId, onRemoveMeeple }) => {
             {members.map(member => (
                 <ListGroup.Item key={member._id} className="d-flex justify-content-between align-items-center">
                     <div>
+                        <Image src={`${member.avatar}`} roundedCircle width="30" height="30" className="me-3" />
                         {member.nickname} {member._id.toString() === ownerId.toString() && <span className="text-muted">Owner</span>}
                     </div>
                     <div>

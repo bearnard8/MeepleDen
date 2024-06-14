@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
+import { toast } from "react-toastify";
 
 const CreateDenForm = () => {
     const { token, meeple } = useAuth();
@@ -27,14 +28,14 @@ const CreateDenForm = () => {
             });
 
             if (response.ok) {
-                alert('Den created successfully');
+                toast.success('Den created successfully');
                 navigate('/home');
             } else {
                 alert('Failed to create den');
             }
         } catch (error) {
             console.error('Error creating den:', error);
-            alert('Failed to create den');
+            toast.danger('Failed to create den');
         }
     };
 
@@ -66,7 +67,7 @@ const CreateDenForm = () => {
                             />
                         </Form.Group>
 
-                        <Button variant="primary" type="submit">
+                        <Button variant="outline-primary" size="sm" className='mt-2' type="submit">
                             Create Den
                         </Button>
                     </Form>

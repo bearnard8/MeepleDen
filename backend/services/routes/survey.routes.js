@@ -36,13 +36,13 @@ surveyRoute.post('/create', async (req, res) => {
 
         // System to notify den members that a survey has been created
         den.members.forEach(async (memberId) => {
-            if (memberId.toString() !== creatorId.toString()) {
+            if (memberId !== creatorId) {
                 // Add a real notifying system
                 console.log(`Notification sent to member ${memberId}`);
             }
         });
 
-        res.status(201).json(survey);
+        res.status(201).json(survey)
     } catch (error) {
         res.status(500).send(error.message);
     }

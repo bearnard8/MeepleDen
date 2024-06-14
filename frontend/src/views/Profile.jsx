@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useAuth } from "../context/AuthContext.jsx";
 import MeeplePersonalInfo from '../components/meeple/MeeplePersonalInfo';
-import PlannedGames from '../components/home/PlannedGames';
+import PlannedGames from '../components/home/PlannedGames/PlannedGames.jsx';
 import MeepleOwnedGames from '../components/meeple/MeepleOwnedGames';
 import MeepleWishedGames from '../components/meeple/MeepleWishedGames.jsx';
 
@@ -53,6 +53,15 @@ const Profile = () => {
         }
     }
 
+    const handleSave = async (updatedMeeple) => {
+        try {
+            const response = await updateMeeple(updatedMeeple);
+            setProfileData(response);
+        } catch (error) {
+            console.error("Error updating profile data:", error);
+        }
+    };
+
     if (!profileData) {
         return <div>Loading...</div>;
     }
@@ -62,14 +71,14 @@ const Profile = () => {
             <h1>Profile</h1>
             <Row>
                 <Col md={4}>
-                    <MeeplePersonalInfo meeple={profileData} updateMeeple={updateMeeple} />
+                    <MeeplePersonalInfo meeple={profileData} updateMeeple={handleSave} />
                 </Col>
                 <Col md={5}>
                 <h3>Planned Games</h3>
-                    <PlannedGames plannedGames={profileData.plannedGames} />
+                    <PlannedGames plannedGames={meeple.plannedGames} />
                 </Col>
                 <Col md={3}>
-                    <MeepleOwnedGames ownedGames={profileData.ownedGames} handleRemoveGame={handleRemoveGame} />
+                    <MeepleOwnedGames ownedGames={meeple.ownedGames} handleRemoveGame={handleRemoveGame} />
                     <MeepleWishedGames wishedGames={meeple.wishedGames} handleRemoveGame={handleRemoveGame} />
                 </Col>
             </Row>

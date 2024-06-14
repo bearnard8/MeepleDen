@@ -4,17 +4,15 @@ import RemoveButton from '../utils/RemoveButton';
 
 const MeepleOwnedGames = ({ ownedGames, handleRemoveGame }) => {
     return (
-        <div>
+        <ListGroup>
             <h3>Owned Games</h3>
-            <ListGroup>
-                {ownedGames.map(game => (
-                    <ListGroup.Item key={game._id} className="d-flex justify-content-between align-items-center">
-                        <div>{game.name}</div>
-                        <RemoveButton game={game} listType="owned" handleRemoveGame={handleRemoveGame} />
-                    </ListGroup.Item>
-                ))}
-            </ListGroup>
-        </div>
+            {ownedGames.map(game => (
+                <ListGroup.Item key={game._id} className="d-flex justify-content-between align-items-center">
+                    {game.name}
+                    <RemoveButton game={game} listType="owned" handleRemoveGame={handleRemoveGame} />
+                </ListGroup.Item>
+            ))}
+        </ListGroup>
     );
 };
 

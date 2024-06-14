@@ -3,7 +3,10 @@ import { ListGroup } from 'react-bootstrap';
 
 const DenPlannedGames = ({ plannedGames }) => {
     if (!plannedGames || plannedGames.length === 0) {
-        return <p>No planned games.</p>;
+        return <div>
+                    <h3>PlannedGames</h3> 
+                    <p>No planned games.</p>
+                </div>
     }
 
     return (

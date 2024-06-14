@@ -5,16 +5,16 @@
     justify-content: space-between;
     padding: 1rem;
     border-bottom: 1px solid #ddd;
-}
-
-.game-cover {
-    width: 100px;
-    height: auto;
-    margin-right: 1rem;
+    background: #ebebeb;
 }
 
 .button-group {
     display: flex;
     justify-content: flex-end;
     margin-top: 1rem;
+}
+
+#game-container {
+    border-radius: 30px;
+    box-shadow:  9px 9px 18px #9d9c9c, -9px -9px 18px #ffffff;
 }

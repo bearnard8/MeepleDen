@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 
-const CreateSurvey = ({ denId, games, onClose }) => {
+const CreateSurvey = ({ denId, games, onClose, onSurveyCreated }) => {
     const { token, meeple } = useAuth();
-    const navigate = useNavigate();
-    const [gameOptions, setGameOptions] = useState([]);
+    const [gameOptions, setGameOptions] = useState(['']);
     const [dateOptions, setDateOptions] = useState([{ date: '', time: '' }]);
 
     const handleGameChange = (index, value) => {
@@ -44,8 +42,8 @@ const CreateSurvey = ({ denId, games, onClose }) => {
 
         if (response.ok) {
             toast.success('Survey created successfully');
+            onSurveyCreated();
             onClose();
-            navigate(`/den/${denId}`);
         } else {
             console.log('Failed to create survey');
             toast.error('Error creating survey');
@@ -56,25 +54,26 @@ const CreateSurvey = ({ denId, games, onClose }) => {
         <Container>
             <h3>Create Survey</h3>
             <Form onSubmit={handleSubmit}>
-                <Form.Group>
-                    <Form.Label>Select Games</Form.Label>
-                    {gameOptions.map((game, index) => (
-                        <Form.Control
-                            as="select"
-                            value={game}
-                            onChange={(e) => handleGameChange(index, e.target.value)}
-                            key={index}
-                        >
-                            <option value="">Select a game</option>
-                            {games.map(game => (
-                                <option key={game._id} value={game._id}>{game.name}</option>
-                            ))}
-                        </Form.Control>
+                <Form.Group className='p-2'>
+                    <Form.Label className='p-1'>Select Games</Form.Label>
+                    {gameOptions.map((gameOption, index) => (
+                        <div key={index}>
+                            <Form.Control
+                                as="select"
+                                value={gameOption}
+                                onChange={(e) => handleGameChange(index, e.target.value)}
+                            >
+                                <option value="">Select a game</option>
+                                {games.map(game => (
+                                    <option key={game._id} value={game._id}>{game.name}</option>
+                                ))}
+                            </Form.Control>
+                        </div>
                     ))}
-                    <Button variant="outline-secondary" onClick={addGameOption}>Add Game Option</Button>
+                    <Button variant="outline-secondary" size="sm" onClick={addGameOption}>Add Game Option</Button>
                 </Form.Group>
                 {dateOptions.map((option, index) => (
-                    <Row key={index}>
+                    <Row key={index} className='p-2'>
                         <Col>
                             <Form.Group>
                                 <Form.Label>Date</Form.Label>
@@ -98,8 +97,10 @@ const CreateSurvey = ({ denId, games, onClose }) => {
                         </Col>
                     </Row>
                 ))}
-                <Button size="sm" variant="outline-secondary" onClick={addDateOption}>Add Date Option</Button>
-                <Button size="sm" variant="outline-primary" type="submit">Create Survey</Button>
+                <Row className='p-2'>
+                    <Button size="sm" className='my-1' variant="outline-secondary" onClick={addDateOption}>Add Date Option</Button>
+                    <Button size="sm" className='my-1' variant="outline-primary" type="submit">Create Survey</Button>
+                </Row>
             </Form>
         </Container>
     );
